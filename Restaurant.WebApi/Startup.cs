@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Restaurant.Infrastructure.Data.Context;
+using Restaurant.Infrastructure.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,8 @@ namespace Restaurant.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Restaurant.WebApi", Version = "v1" });
             });
+
+            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +68,11 @@ namespace Restaurant.WebApi
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            DependencyContainer.RegisterServices(services);
         }
     }
 }
