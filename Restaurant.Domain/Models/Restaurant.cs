@@ -17,10 +17,10 @@ namespace Restaurant.Domain.Models
         [StringLength(100)]
         public string RestaurantName { get; set; }
         public int Type { get; set; }
-        [Column(TypeName = "time(2)")]
-        public TimeSpan OpenHour { get; set; }
-        [Column(TypeName = "time(2)")]
-        public TimeSpan EndHour { get; set; }
+        //[Column(TypeName = "time(2)")]
+        public string OpenHour { get; set; }
+        //[Column(TypeName = "time(2)")]
+        public string EndHour { get; set; }
         [StringLength(100)]
         public string Description { get; set; }
     }

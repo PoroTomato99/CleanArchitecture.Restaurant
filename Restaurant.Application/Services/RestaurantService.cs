@@ -18,17 +18,18 @@ namespace Restaurant.Application.Services
         }
 
         public RestaurantViewModel CreateRestaurant(Domain.Models.Restaurant r)
-        {
-            throw new NotImplementedException();
+        {         
+            var CreateRestaurant = _restaurant.AddRestaurant(r);
+            return new RestaurantViewModel()
+            {
+                Restaurant = CreateRestaurant
+            };
         }
 
         public bool DeleteRestaurant(Domain.Models.Restaurant r)
         {
-            RestaurantViewModel x = new()
-            {
-                DeleteRestaurant = _restaurant.DeleteRestaurant(r)
-            };
-            return x.DeleteRestaurant;
+            var deleteRestaurant = _restaurant.DeleteRestaurant(r);
+            return deleteRestaurant;
         }
 
         public RestaurantViewModel GetRestaurant(int id)
@@ -49,7 +50,11 @@ namespace Restaurant.Application.Services
 
         public RestaurantViewModel UpdateRestaurant(Domain.Models.Restaurant r)
         {
-            throw new NotImplementedException();
+            var UpdateRestaurant = _restaurant.UpdateRestaurant(r);
+            return new RestaurantViewModel()
+            {
+                Restaurant = UpdateRestaurant
+            };
         }
     }
 }

@@ -15,5 +15,6 @@ namespace Restaurant.Application.Interfaces
         RestaurantViewModel UpdateRestaurant(Domain.Models.Restaurant r);
         Boolean DeleteRestaurant(Domain.Models.Restaurant r);
 
+
     }
 }

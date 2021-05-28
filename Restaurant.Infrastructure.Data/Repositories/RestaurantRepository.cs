@@ -48,7 +48,24 @@ namespace Restaurant.Infrastructure.Data.Repositories
         }
         public bool DeleteRestaurant(Domain.Models.Restaurant x)
         {
-            throw new NotImplementedException();
+            _context.Restaurants.Remove(x);
+            try
+            {
+                _context.SaveChanges();
+                var r = _context.Restaurants.Find(x.Id);
+                if (r == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception) 
+            {       
+                throw;
+            }
         }
         public bool IsRestaurantExist(Domain.Models.Restaurant x)
         {
