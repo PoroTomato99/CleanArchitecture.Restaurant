@@ -1,0 +1,1 @@
+This is Angular UI to send request to CleanArchitecture.Restaurant.WebAPI

@@ -21,7 +21,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Domain", "Restau
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Infrastructure.Data", "Restaurant.Infrastructure.Data\Restaurant.Infrastructure.Data.csproj", "{CAED70D8-620E-48CB-850A-65F038F30C9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Infrastructure.IoC", "Restaurant.Infrastructure.IoC\Restaurant.Infrastructure.IoC.csproj", "{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Infrastructure.IoC", "Restaurant.Infrastructure.IoC\Restaurant.Infrastructure.IoC.csproj", "{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Restaurant.UI.Angular", "Restaurant.UI.Angular", "{7209316B-FD2F-45A9-987A-87FEAD288F7D}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.txt = ReadMe.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
