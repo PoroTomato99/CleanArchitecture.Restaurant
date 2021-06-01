@@ -14,7 +14,5 @@ namespace Restaurant.Application.Interfaces
         RestaurantViewModel CreateRestaurant(Domain.Models.Restaurant r);
         RestaurantViewModel UpdateRestaurant(Domain.Models.Restaurant r);
         Boolean DeleteRestaurant(Domain.Models.Restaurant r);
-
-
     }
 }

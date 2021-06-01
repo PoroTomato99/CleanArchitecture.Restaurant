@@ -16,7 +16,7 @@ namespace Restaurant.WebApi.Controllers
     [ApiController]
     public class RestaurantController : ControllerBase
     {
-        //dependency injectino 
+        //dependency injection
         private readonly IRestaurantService _restaurant;
         public RestaurantController(IRestaurantService restaurant)
         {

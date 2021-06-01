@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+#nullable disable
 
 namespace Restaurant.Domain.Models
 {
     [Table("Restaurant")]
-    public class Restaurant
+    public partial class Restaurant
     {
         [Key]
         public int Id { get; set; }
@@ -17,11 +17,15 @@ namespace Restaurant.Domain.Models
         [StringLength(100)]
         public string RestaurantName { get; set; }
         public int Type { get; set; }
-        //[Column(TypeName = "time(2)")]
+        [Required]
+        [StringLength(50)]
         public string OpenHour { get; set; }
-        //[Column(TypeName = "time(2)")]
+        [Required]
+        [StringLength(50)]
         public string EndHour { get; set; }
         [StringLength(100)]
         public string Description { get; set; }
+        [StringLength(450)]
+        public string UserId { get; set; }
     }
 }

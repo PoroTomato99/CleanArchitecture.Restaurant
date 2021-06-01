@@ -20,6 +20,15 @@ namespace Restaurant.Infrastructure.IoC
 
             //Restaurant.Domain.Interface || Restaurant.Infrastructure.Data.Repositories
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+
+            ////Authentication Application 
+            //services.AddScoped<IAuthenticationService, AuthenticationService>();
+            //services.AddScoped<IAuthenticationRepo, AuthenticationRepo>();
+
+            //Booking Application 
+            services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<IBookingRepo, BookingRepo>();
+            
         }
     }
 }

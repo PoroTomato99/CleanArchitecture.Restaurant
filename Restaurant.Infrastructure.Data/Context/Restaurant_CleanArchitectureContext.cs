@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-
-
+using Microsoft.EntityFrameworkCore.Metadata;
+using Restaurant.Domain.Models;
 
 #nullable disable
 
@@ -10,10 +10,12 @@ namespace Restaurant.Infrastructure.Data.Context
     public partial class Restaurant_CleanArchitectureContext : DbContext
     {
         public Restaurant_CleanArchitectureContext(DbContextOptions<Restaurant_CleanArchitectureContext> options)
-    : base(options)
+            : base(options)
         {
         }
-        public DbSet<Domain.Models.Restaurant> Restaurants { get; set; }
+
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<Domain.Models.Restaurant> Restaurants { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,6 +28,11 @@ namespace Restaurant.Infrastructure.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.Property(e => e.ReservationTime).IsUnicode(false);
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

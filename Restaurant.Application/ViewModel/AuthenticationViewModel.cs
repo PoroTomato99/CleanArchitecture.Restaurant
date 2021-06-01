@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Application.ViewModel
 {
-    public class Response
+    public class AuthenticationViewModel
     {
-        public string Type { get; set; }
-        public string Message { get; set; }
+        public Domain.ResponsesModels.Response Response { get; set; }
     }
 }
