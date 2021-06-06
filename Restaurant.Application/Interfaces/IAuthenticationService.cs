@@ -11,5 +11,7 @@ namespace Restaurant.Application.Interfaces
     public interface IAuthenticationService
     {
         AuthenticationViewModel CreateAdmin(Register_Admin x);
+        AuthenticationViewModel DeleteAdmin(string userId);
+        AuthenticationViewModel LoginUser(Login_Model credentials);
     }
 }

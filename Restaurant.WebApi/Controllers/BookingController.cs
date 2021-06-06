@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Interfaces;
 using Restaurant.Application.ViewModel;
+using Restaurant.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Restaurant.WebApi.Controllers
         {
             try
             {
-                BookingViewModel bookings = _service.GetRestaurants();
+                BookingViewModel bookings = _service.GetBookings();
                 if (bookings.Bookings == null)
                 {
                     return NotFound();
@@ -54,8 +55,20 @@ namespace Restaurant.WebApi.Controllers
 
         // POST api/<BookingController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Booking reservation)
         {
+            try
+            {
+                var CreateBooking = _service.CreateBooking(reservation);
+                return Ok(CreateBooking);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new BookingViewModel()
+                {
+                    Response = new(ex.GetType().ToString(), ex.Message)
+                });
+            }
         }
 
         // PUT api/<BookingController>/5

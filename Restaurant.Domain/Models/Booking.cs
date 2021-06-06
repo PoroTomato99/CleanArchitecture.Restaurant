@@ -13,21 +13,39 @@ namespace Restaurant.Domain.Models
     {
         [Key]
         public int Id { get; set; }
+        public int? RestaurantId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime BookingDate { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string Remark { get; set; }
+        [StringLength(450)]
+        public string ReservedBy { get; set; }
         [Column(TypeName = "date")]
         public DateTime ReservationDate { get; set; }
         [Required]
         [StringLength(10)]
         public string ReservationTime { get; set; }
-        [StringLength(450)]
-        public string UserId { get; set; }
+        [StringLength(50)]
+        public string Status { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }
         [StringLength(450)]
         public string UpdatedBy { get; set; }
+
+        [ForeignKey(nameof(RestaurantId))]
+        [InverseProperty("Bookings")]
+        public virtual Restaurant Restaurant { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"Booking Id : {Id}\n" +
+                $"Restaurant Id : {RestaurantId}\n" +
+                $"Booking Date : {BookingDate}\n" +
+                $"Reserved By : {ReservedBy}\n" +
+                $"Reservation Date : {ReservationDate.ToShortDateString()}\n" +
+                $"Reservation Time : {ReservationTime}\n" +
+                $"Reservation Status : {Status}\n" +
+                $"LastUpdated : {LastUpdate}\n" +
+                $"UpdatedBy : {UpdatedBy}";
+        }
     }
 }

@@ -11,5 +11,8 @@ namespace Restaurant.Domain.Interfaces
     public interface IAuthenticationRepo
     {
         Task<ApplicationUser> RegisterAdminAsync(Register_Admin x);
+        Task<bool> DeleteAdminAsync(string userId);
+        Task<JwtToken> LoginAdmin(Login_Model credentials);
+        Task<UserProfile> GetUserProfile(string username);
     }
 }

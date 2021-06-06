@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Application.ViewModel
+namespace Restaurant.Domain.ResponsesModels
 {
-    public class ExceptionResponse
+    public class NoUser_Excepetion
     {
-        private string type = $"Exception Error";
+        private string type = $"Not Found Exception";
         public string Type
         {
             get
@@ -20,7 +20,7 @@ namespace Restaurant.Application.ViewModel
                 type = value;
             }
         }
-        private string message = $"An Exception Error Occurred While Attemping to make changes to Database.";
+        private string message = $"No User Found!";
         public string Message
         {
             get
@@ -32,11 +32,7 @@ namespace Restaurant.Application.ViewModel
                 message = value;
             }
         }
-
-        public ExceptionResponse()
-        {
-        }
-        public ExceptionResponse(string x, string y)
+        public NoUser_Excepetion(string x, string y)
         {
             Type = x;
             Message = y;
@@ -44,7 +40,7 @@ namespace Restaurant.Application.ViewModel
 
         public override string ToString()
         {
-            return $"{Message}";
+            return $"{Type} : {Message}";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Restaurant.Domain.Interfaces;
 using Restaurant.Domain.Models;
+using Restaurant.Domain.ResponsesModels;
 using Restaurant.Infrastructure.Data.Context;
 using System;
 using System.Collections.Generic;

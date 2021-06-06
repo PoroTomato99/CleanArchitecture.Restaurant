@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Infrastructure.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Infrastructure.IoC", "Restaurant.Infrastructure.IoC\Restaurant.Infrastructure.IoC.csproj", "{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Restaurant.UI", "Restaurant.UI", "{FF1F5A7B-2559-4C61-8833-E0D9E456EA7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.UI.Razor_App", "Restaurant.UI.Razor_App\Restaurant.UI.Razor_App.csproj", "{095E1AEE-474A-400F-BD19-D9626E4DD0DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{095E1AEE-474A-400F-BD19-D9626E4DD0DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095E1AEE-474A-400F-BD19-D9626E4DD0DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095E1AEE-474A-400F-BD19-D9626E4DD0DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095E1AEE-474A-400F-BD19-D9626E4DD0DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +67,7 @@ Global
 		{36CAC964-64DF-4F1B-A1C9-544343C14890} = {4459A8FE-3E20-4463-892D-77F8510B7E95}
 		{CAED70D8-620E-48CB-850A-65F038F30C9E} = {EE5BCDF3-85FB-4914-A305-8F91716E8B0F}
 		{C886ED99-EBC3-4502-B1DC-D0E18E15AF7A} = {603F46E8-D6ED-4155-BF6D-9DC91AF9BE36}
+		{095E1AEE-474A-400F-BD19-D9626E4DD0DA} = {FF1F5A7B-2559-4C61-8833-E0D9E456EA7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FC97F1B5-2CA3-4AF3-A809-446EE9984884}

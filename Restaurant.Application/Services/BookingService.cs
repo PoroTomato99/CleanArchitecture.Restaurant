@@ -1,6 +1,8 @@
 ﻿using Restaurant.Application.Interfaces;
 using Restaurant.Application.ViewModel;
 using Restaurant.Domain.Interfaces;
+using Restaurant.Domain.Models;
+using Restaurant.Domain.ResponsesModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,22 +19,27 @@ namespace Restaurant.Application.Services
             _bookingRepo = bookingRepo;
         }
 
-        public BookingViewModel CreateRestaurant(Domain.Models.Restaurant r)
+        public BookingViewModel CreateBooking(Domain.Models.Booking r)
+        {
+            var CreateBooking = _bookingRepo.CreateBooking(r);
+            return new BookingViewModel()
+            {
+                Booking = CreateBooking,
+                Response = new Response("Create Booking", $"Successfully Created Booking for {CreateBooking.ReservationDate.ToShortDateString()}, {CreateBooking.ReservationTime}")
+            };
+        }
+
+        public bool DeleteBooking(Domain.Models.Booking r)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteRestaurant(Domain.Models.Restaurant r)
+        public BookingViewModel GetBooking(int id)
         {
             throw new NotImplementedException();
         }
 
-        public BookingViewModel GetRestaurant(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BookingViewModel GetRestaurants()
+        public BookingViewModel GetBookings()
         {
             return new BookingViewModel()
             {
@@ -40,7 +47,7 @@ namespace Restaurant.Application.Services
             };
         }
 
-        public BookingViewModel UpdateRestaurant(Domain.Models.Restaurant r)
+        public BookingViewModel UpdateBooking(Domain.Models.Booking r)
         {
             throw new NotImplementedException();
         }

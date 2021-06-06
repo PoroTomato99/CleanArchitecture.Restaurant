@@ -14,7 +14,9 @@ namespace Restaurant.Infrastructure.Data.Context
         {
         }
 
+        public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<OwnerRegisterForm> OwnerRegisterForms { get; set; }
         public virtual DbSet<Domain.Models.Restaurant> Restaurants { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,6 +34,19 @@ namespace Restaurant.Infrastructure.Data.Context
             modelBuilder.Entity<Booking>(entity =>
             {
                 entity.Property(e => e.ReservationTime).IsUnicode(false);
+
+                entity.HasOne(d => d.Restaurant)
+                    .WithMany(p => p.Bookings)
+                    .HasForeignKey(d => d.RestaurantId)
+                    .HasConstraintName("FK_Booking_Restaurant");
+            });
+
+            modelBuilder.Entity<Domain.Models.Restaurant>(entity =>
+            {
+                entity.HasOne(d => d.Address)
+                    .WithMany(p => p.Restaurants)
+                    .HasForeignKey(d => d.AddressId)
+                    .HasConstraintName("FK_Restaurant_Address");
             });
 
             OnModelCreatingPartial(modelBuilder);

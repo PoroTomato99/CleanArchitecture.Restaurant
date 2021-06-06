@@ -9,10 +9,10 @@ namespace Restaurant.Application.Interfaces
 {
     public interface IBookingService
     {
-        BookingViewModel GetRestaurants();
-        BookingViewModel GetRestaurant(int id);
-        BookingViewModel CreateRestaurant(Domain.Models.Restaurant r);
-        BookingViewModel UpdateRestaurant(Domain.Models.Restaurant r);
-        Boolean DeleteRestaurant(Domain.Models.Restaurant r);
+        BookingViewModel GetBookings();
+        BookingViewModel GetBooking(int id);
+        BookingViewModel CreateBooking(Domain.Models.Booking r);
+        BookingViewModel UpdateBooking(Domain.Models.Booking r);
+        Boolean DeleteBooking(Domain.Models.Booking r);
     }
 }

@@ -22,8 +22,8 @@ namespace Restaurant.Infrastructure.IoC
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 
             ////Authentication Application 
-            //services.AddScoped<IAuthenticationService, AuthenticationService>();
-            //services.AddScoped<IAuthenticationRepo, AuthenticationRepo>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthenticationRepo, AuthenticationRepo>();
 
             //Booking Application 
             services.AddScoped<IBookingService, BookingService>();

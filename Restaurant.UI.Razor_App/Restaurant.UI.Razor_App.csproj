@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Administrator\" />
+    <Folder Include="Pages\Authorization\" />
+    <Folder Include="Pages\Reservation\" />
+  </ItemGroup>
+
+</Project>

@@ -10,6 +10,7 @@ namespace Restaurant.Application.ViewModel
     public class BookingViewModel
     {
         public IEnumerable<Booking> Bookings { get; set; }
+        public Booking Booking { get; set; }
         public Domain.ResponsesModels.Response Response {get;set;}
     }
 }

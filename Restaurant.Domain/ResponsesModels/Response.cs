@@ -42,8 +42,8 @@ namespace Restaurant.Domain.ResponsesModels
         //Customized Response
         public Response(string type, string message)
         {
-            Type = $"{this.type} : {type} ";
-            Message = $"{this.message} : {message}";
+            Type = $"{type}";
+            Message = $"{message}";
         }
 
         public override string ToString()

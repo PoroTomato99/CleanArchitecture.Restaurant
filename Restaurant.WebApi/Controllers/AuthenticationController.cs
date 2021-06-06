@@ -25,85 +25,70 @@ namespace Restaurant.WebApi.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        //private readonly IEmailSender _emailSender;
-        private readonly ILogger<AuthenticationController> _logger;
-
-
-        //Dependency Injection
-        public AuthenticationController(RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager, ILogger<AuthenticationController> logger)
+        private readonly IAuthenticationService _authentication;
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            _logger = logger;
+            _authentication = authenticationService;
         }
 
-        //private readonly IAuthenticationService _authentication;
-        //public AuthenticationController(IAuthenticationService authenticationService)
-        //{
-        //    _authentication = authenticationService;
-        //}
-
         //register admin
-        [HttpPost("admin-register-registration")]
-        public async Task<IActionResult> RegisterAdmin([FromBody] Register_Admin admin)
+        [HttpPost("admin-registration")]
+        public IActionResult RegisterAdmin([FromBody] Register_Admin admin)
         {
-            //try
-            //{
-            //    call IAuthenticationService
-            //    var CreateAdmin = _authentication.CreateAdmin(admin);
-            //    return Ok(CreateAdmin);
-            //}
-            //catch (Exception ex)
-            //{
-            //    var response = new Domain.ResponsesModels.Response(type: ex.GetType().ToString(), message: ex.Message);
-            //    return Conflict(new AuthenticationViewModel()
-            //    {
-            //        Response = response
-            //    });
-            //}
-            //check if user existed
-            var user = await userManager.FindByNameAsync(admin.Username);
-            if (user != null)
-            {
-                return Conflict("User Existed");
-            }
-
-            ApplicationUser new_admin = new()
-            {
-                Email = admin.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = admin.Username
-            };
-
             try
             {
-                var createUser = await userManager.CreateAsync(new_admin, admin.Password);
-                if (!createUser.Succeeded)
-                {
-                    return Conflict(createUser.Errors);
-                }
-                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-                if (!await roleManager.RoleExistsAsync(UserRoles.Customer))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Customer));
-                if (!await roleManager.RoleExistsAsync(UserRoles.Owner))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Owner));
-                if (!await roleManager.RoleExistsAsync(UserRoles.Employee))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Employee));
-
-                if (await roleManager.RoleExistsAsync(UserRoles.Admin))
-                {
-                    await userManager.AddToRoleAsync(new_admin, UserRoles.Admin);
-                }
-
-                return Ok(await userManager.FindByNameAsync(admin.Username)); 
+                /*call IAuthenticationService*/
+                var CreateAdmin = _authentication.CreateAdmin(admin);
+                return Ok(CreateAdmin);
             }
             catch (Exception ex)
             {
-                return Conflict(ex);
+                var response = new Domain.ResponsesModels.Response(type: ex.GetType().ToString(), message: ex.Message);
+                return Conflict(new AuthenticationViewModel()
+                {
+                    Response = response
+                });
+            }
+        }
+
+        [HttpDelete("delete-admin/{userId}")]
+        public IActionResult DeleteAdmin([FromRoute]string userId)
+        {
+            try
+            {
+                var DeleteAdmin = _authentication.DeleteAdmin(userId);
+                return Ok(DeleteAdmin);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new AuthenticationViewModel()
+                {
+                    Response = new(ex.GetType().ToString(), ex.Message)
+                });
+            }
+        }
+
+        [HttpPut("owner-registration/{userId}")]
+        public IActionResult CreateOwner([FromRoute] string userId)
+        {
+            return Ok("This is to Create Restaurant Owner");
+        }
+
+        [HttpPost("login")]
+        public IActionResult LoginUser([FromBody] Login_Model credentials)
+        {
+            try
+            {
+                var LoginUser = _authentication.LoginUser(credentials);
+
+                return Ok(LoginUser);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new AuthenticationViewModel()
+                {
+                    Response = new(ex.GetType().ToString(), ex.Message)
+                });
             }
         }
 

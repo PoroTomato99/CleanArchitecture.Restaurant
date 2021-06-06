@@ -2,6 +2,8 @@
 using Restaurant.Application.Interfaces;
 using Restaurant.Application.ViewModel;
 using Restaurant.Domain.AuthenticationModel;
+using Restaurant.Domain.Interfaces;
+using Restaurant.Domain.ResponsesModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,29 +14,38 @@ namespace Restaurant.Application.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IAuthenticationService _authentication;
+        private readonly IAuthenticationRepo _authRepo;
 
-        public AuthenticationService(IAuthenticationService authentication)
+        public AuthenticationService(IAuthenticationRepo authentication)
         {
-            _authentication = authentication;
+            _authRepo = authentication;
         }
 
         public AuthenticationViewModel CreateAdmin(Register_Admin x)
         {
-            var CreateAdmin = _authentication.CreateAdmin(x);
+            var CreateAdmin = _authRepo.RegisterAdminAsync(x);
             return new AuthenticationViewModel()
             {
-                Response = new Domain.ResponsesModels.Response($"{StatusCodes.Status200OK}", $"Successfuly Created Admin : {x.Username}")
+                User = CreateAdmin.Result
             };
-            //if(CreateAdmin != null)
-            //{
-            //    var Response = new Domain.ResponsesModels.Response(StatusCodes.Status200OK.ToString(), 
-            //        $"Sucessfully Created {x.Username}");
+        }
 
-            //    CreateAdmin.Response = Response;
-            //    return CreateAdmin;
-            //}
-            //throw new NullReferenceException();
+        public AuthenticationViewModel DeleteAdmin(string userId)
+        {
+            var DeleteAdmin = _authRepo.DeleteAdminAsync(userId);
+            return new AuthenticationViewModel()
+            {
+                Response = new Response("Delete User", DeleteAdmin.Result.ToString())
+            };
+        }
+
+        public AuthenticationViewModel LoginUser(Login_Model credentials)
+        {
+            return new AuthenticationViewModel()
+            {
+                Profile = _authRepo.GetUserProfile(credentials.Username).Result,
+                Token = _authRepo.LoginAdmin(credentials).Result.Token
+            };
         }
     }
 }
