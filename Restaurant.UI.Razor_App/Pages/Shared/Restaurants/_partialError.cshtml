@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Restaurant.Application.ViewModel.RestaurantViewModel 
+
+@if (Model.Response == null)
+{
+    <h5 class="text-lg-center">
+        Error Finding Restaurant
+    </h5>
+}
+else
+{
+    <p class="text-danger text-md-center">
+        @Model.Response.Message
+    </p>
+}
+
+<p>
+    <a asp-page="/Reservation/Index">
+        Back
+    </a>
+</p>

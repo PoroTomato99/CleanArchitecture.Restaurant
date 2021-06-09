@@ -1,16 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Restaurant.UI.Razor_App
+namespace Restaurant.Angular
 {
     public class Startup
     {
@@ -24,21 +20,12 @@ namespace Restaurant.UI.Razor_App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-            services.AddMvc().AddRazorPagesOptions(options =>
+            services.AddControllersWithViews();
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
             {
-                options.Conventions.AddPageRoute("/Authentication/Index", "");
+                configuration.RootPath = "ClientApp/dist";
             });
-
-            /*add api url*/
-            services.AddHttpClient();
-            services.AddHttpClient("API_URL", x =>
-            {
-                x.BaseAddress = new Uri(Configuration.GetValue<string>("Api_Url"));
-            });
-            services.AddMvc().AddSessionStateTempDataProvider();
-            services.AddSession();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,14 +44,31 @@ namespace Restaurant.UI.Razor_App
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
 
             app.UseRouting();
 
-            app.UseAuthorization();
-            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }

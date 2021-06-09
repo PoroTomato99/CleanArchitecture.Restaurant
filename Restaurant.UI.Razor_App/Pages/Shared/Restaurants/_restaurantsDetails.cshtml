@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Restaurant.Application.ViewModel.RestaurantViewModel
+@if (Model == null)
+{
+    <h5 class="text-md-center text-danger">
+        @Model.Response.Message
+    </h5>
+}
+else
+{
+    <table id="restaurant_detail" class="table table-bordered">
+        <thead>
+            <tr>
+                <td colspan="4" class="text-md-center">@Model.Restaurant.RestaurantName's Details</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="2">Restaurant Type : </td>
+                <td colspan="2">@Model.Restaurant.Type </td>
+            </tr>
+            <tr>
+                <td colspan="2">Business Hour : </td>
+                <td colspan="1" id="openHour">@Model.Restaurant.OpenHour</td>
+          
+                <td colspan="1" id="endHour"> @Model.Restaurant.EndHour</td>
+            </tr>
+            <tr>
+                <td colspan="2">Description : </td>
+                <td colspan="2">@Model.Restaurant.Description </td>
+            </tr>
+            <tr>
+                <td colspan="2">Available Table: </td>
+                <td colspan="2">@Model.Restaurant.TableQty </td>
+            </tr>
+        </tbody>
+    </table>
+
+}

@@ -14,13 +14,18 @@ namespace Restaurant.Domain.Models
         [Key]
         public int Id { get; set; }
         public int? RestaurantId { get; set; }
+
         [Column(TypeName = "datetime")]
         public DateTime BookingDate { get; set; }
+
         [StringLength(450)]
         public string ReservedBy { get; set; }
+
         [Column(TypeName = "date")]
+        [Required(ErrorMessage = "Please Choose a Date to Reserve")]
         public DateTime ReservationDate { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Please Choose A Time to Reserve")]
         [StringLength(10)]
         public string ReservationTime { get; set; }
         [StringLength(50)]

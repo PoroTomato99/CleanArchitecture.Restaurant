@@ -1,0 +1,65 @@
+﻿@page
+@model Restaurant.UI.Razor_App.Pages.Reservation.IndexModel
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/restaurants?handler=RestaurantPartial',
+                success: function (data) {
+                    $("#load").html(data);
+                }
+            });
+        });
+
+
+        $("button").on('click', function () {
+            var btn_value = (this.id);
+
+            switch (btn_value) {
+                case 'btn_1':
+                    console.log("This is btn 1");
+                    $(document).ready(function () {
+                        $.ajax({
+                            url: '/restaurants?handler=RestaurantPartial',
+                            success: function (data) {
+                                $("#load").html(data);
+                            }
+                        });
+                    });
+                    break;
+
+                case 'btn_2':
+                    console.log("This is btn 2");
+                    $("#load").html("This is button 2");
+                    break;
+            }
+        });
+    </script>
+}
+
+<h1 class="text-lg-center text-success">
+    Welcome to Restaurant Reservation System
+</h1>
+<div class="navbar navbar-expand navbar-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <button class="nav-link" id="btn_1">
+                    Restaurants
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="btn_2">
+                    Orders History
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="load">
+</div>
+
+<div id="grid"></div>
+

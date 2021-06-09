@@ -1,0 +1,165 @@
+﻿@page
+@model DetailsModel
+
+<h2 class="text-md-center">
+    Restaurant Details
+</h2>
+
+<partial name="Restaurants/_restaurantsDetails" model="@Model.RestaurantDetail">
+
+    @{
+        var todate = DateTime.Now.ToString("yyyy-MM-dd");
+        var bookingDate = DateTime.Now.ToString("yyyy-MM--dd HH:mm:ss");
+        var reservedBy = Guid.NewGuid();
+    }
+    <form method="post">
+
+        <input type="date" asp-for="Reservation.ReservationDate" min="@todate" class="form-control" />
+        <span asp-validation-for="Reservation.ReservationDate" class="text-danger"></span>
+
+        <select asp-for="Reservation.ReservationTime">
+            <option selected value=""> --:-- </option>
+            @*@foreach (var x in Model.TimeList)
+            {
+                <option> @x  </option>
+            }*@
+        </select>
+
+        <p class="text-danger">
+            @Model.RestaurantDetail.Restaurant.Id;
+        </p>
+        <span asp-validation-for="Reservation.ReservationTime" class="text-danger"></span>
+        <input type="hidden" asp-for="Reservation.RestaurantId" value="@Model.RestaurantDetail.Restaurant.Id" />
+        <input type="hidden" asp-for="Reservation.BookingDate" value="@bookingDate" />
+        <input type="hidden" asp-for="Reservation.ReservedBy" value="@reservedBy" />
+        <input type="hidden" asp-for="Reservation.Status" value="@Restaurant.Domain.Models.Status.BookingStatus.Pending" />
+
+        <button type="submit">
+            Reserve
+        </button>
+    </form>
+    @section scripts{
+        <script>
+            $(document).ready(function () {
+                var open_time = $('#openHour').text();
+                var end_time = $('#endHour').text();
+
+
+                var openTime = new Date("January 01, 2000 " + open_time);
+                var endTime = new Date("January 01, 2000 " + end_time);
+                console.log('OPEN TIME');
+                console.log('Get Hours : ' + openTime.getHours());
+
+                console.log('END TIME');
+                console.log('Get Hours : ' + endTime.getHours());
+
+
+                var open_hour = openTime.getHours();
+                var end_hour = endTime.getHours();
+                var duration = end_hour - open_hour;
+                console.log('Duration : ' + duration);
+
+
+
+                $('#Reservation_ReservationDate').change(function () {
+                    var reservation_date = new Date($(this).val()+' 00:00:00');
+                    
+                    var currentDate = new Date();
+                    console.log("Today : " + currentDate);
+                    console.log('Reservation Date : ' + reservation_date);
+
+                    currentDate = currentDate.getDay();
+                    reservation_date = reservation_date.getDay();
+                    if (reservation_date > currentDate) {
+                        console.log('date is bigger then todaate' + (reservation_date > currentDate));
+                    }
+
+                    if (reservation_date > currentDate) {
+                        /*when selected date more than current date, then do something*/
+
+                        //first create a timeList
+                        var timeString = open_hour;
+                        var timeList = [];
+                        for (var i = 0; i < duration; i++) {
+                            var item = timeString + i + ':00:00';
+                            timeList.push(item);
+                        }
+                        console.log('Time list before Removed : ' + timeList);
+
+                        var length = $('#Reservation_ReservationTime > option').length;
+                        if (length > 1) {
+                            for (var j = 0; j < timeList.length; j++) {
+                                $("#Reservation_ReservationTime option[value='"+ timeList[j] +"']").remove();
+                            }                                                     
+                            console.log('removed options');
+                        }
+                        for (var x = 0; x < timeList.length; x++) {
+                            console.log('Time : ' + timeList[x]);
+                            $('#Reservation_ReservationTime').append($('<option />').val(timeList[x]).text(timeList[x]));
+                        }                       
+                    } else {
+                        /*if selected date not more that current date then do something*/
+                        console.log("Need to Cut the Operation Hour");
+
+                        //create a new timeList
+                        var newTimeList = [];
+                        //first get current time hour
+                        var currentDateTime = new Date();
+                        var current_Hour = currentDateTime.getHours();
+                        var current_minute = currentDateTime.getMinutes();
+                        if (current_Hour > open_hour) {
+                            if (current_minute > 30) {
+                                current_Hour += 1;
+                            }
+                            console.log(current_Hour);
+                            var new_duration = end_hour - (current_Hour);
+                            console.log(new_duration);
+
+                            for (var i = 0; i < new_duration; i++) {
+                                var item = current_Hour + i + ":00:00";
+                                newTimeList.push(item);
+                            }
+
+                            var length = $('#Reservation_ReservationTime > option').length;
+                            if (length > 1) {
+                                for (var j = 0; j < newTimeList.length; j++) {
+                                    $("#Reservation_ReservationTime option[value='" + newTimeList[j] + "']").remove();
+                                }
+                                console.log('removed options');
+                            }
+                            for (var x = 0; x < newTimeList.length; x++) {
+                                console.log('Time : ' + newTimeList[x]);
+                                $('#Reservation_ReservationTime').append($('<option />').val(newTimeList[x]).text(newTimeList[x]));
+                            }
+                        } else {
+                            console.log('business not yet open ');
+                            if (newTimeList.length > 0) {
+                                newTimeList = [];
+                            }
+                            console.log('before adding : ' + newTimeList);
+                            for (var x = 0; x < duration; x++) {
+                                var item = open_hour + x + ':00:00';
+                                newTimeList.push(item);
+                            }
+
+                            
+                            console.log('after adding ' + newTimeList);
+
+                            var opt_length = $('#Reservation_ReservationTime > option').length;
+                            if (opt_length > 1) {
+                                for (var o = 0; o < opt_length; o++) {
+                                    $("#Reservation_ReservationTime option[value='" + newTimeList[o] + "']").remove();
+                                }
+                            }
+
+                            for (var z = 0; z < newTimeList.length; z++) {
+                                console.log('Time : ' + newTimeList[z]);
+                                $('#Reservation_ReservationTime').append($('<option />').val(newTimeList[z]).text(newTimeList[z]));
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    }
+
