@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using Restaurant.Application.Interfaces;
 using Restaurant.Application.ViewModel;
 using Restaurant.Domain.Interfaces;
 using Restaurant.Domain.Models;
@@ -25,7 +26,7 @@ namespace Restaurant.Application.Services
             return new BookingViewModel()
             {
                 Booking = CreateBooking,
-                Response = new Response("Create Booking", $"Successfully Created Booking for {CreateBooking.ReservationDate.ToShortDateString()}, {CreateBooking.ReservationTime}")
+                Response = new Response($"Create Booking Success", $"Successfully Created Booking for {CreateBooking.ReservationDate.ToShortDateString()}, {CreateBooking.ReservationTime}")
             };
         }
 

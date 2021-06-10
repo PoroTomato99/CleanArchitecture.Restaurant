@@ -1,0 +1,65 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+}
+@model Restaurant.Application.ViewModel.BookingViewModel
+
+@if (Model.Booking == null)
+{
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">
+            Oops! Something Went Wrong
+        </h4>
+        <p>Please Try Again Later. Or you may contact the administor via xyz@gmail.com</p>
+        <hr>
+        <p class="mb-0">
+            Please click <a asp-page="/Reservation/Index">Here</a> to go back home page.
+        </p>
+    </div>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">
+           Successfull Booking Details
+        </h4>
+        <p>Below are the details of your booking.</p>
+        <hr>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th class="col-6">Booking's Details</th>
+                </tr>
+                <tr>
+                    <th class="col-3">
+                        Date : @Model.Booking.BookingDate
+                    </th>
+                    <th class="col-3">
+                        Booking Status : <p class="text-success"> @Model.Booking.Status</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-2 text-right"> Booking Id</td>
+                    <td class="col-4 text-center">@Model.Booking.Id</td>
+                </tr>
+                <tr>
+                    <td class="col-2 text-right"> Restaurant's Name </td>
+                    <td class="col-4 text-center">@Model.Booking.RestaurantId</td>
+                </tr>
+                <tr>
+                    <td class="col-2 text-right"> Reserved Date </td>
+                    <td class="col-4 text-center">@Model.Booking.ReservationDate</td>
+                </tr>
+
+                <tr>
+                    <td class="col-2 text-right"> Reserved Time</td>
+                    <td class="col-4 text-center">@Model.Booking.ReservationTime</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

@@ -78,10 +78,37 @@ namespace Restaurant.UI.Razor_App.Pages.Restaurants
         { 
             if(Reservation == null)
             {
-                Console.WriteLine("Error : Reservation is Null!");
+                return Partial("/Restaurants/_partialError");
 
             }
-            return RedirectToPage("Restaurants/_partialError");
+            var client = _clientFactory.CreateClient("API_URL");
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            try
+            {
+                var CreateBooking = await client.PostAsJsonAsync("Booking", Reservation);
+                if (CreateBooking.IsSuccessStatusCode)
+                {
+                    var success_result = CreateBooking.Content.ReadFromJsonAsync<BookingViewModel>().Result;
+                    return Partial("Restaurants/_success_book", success_result);
+                }
+                else
+                {
+                    var error_result = CreateBooking.Content.ReadFromJsonAsync<BookingViewModel>().Result;
+                    return Partial("Restaurants/_partialError", error_result);
+                }
+            }
+            catch (Exception ex)
+            {
+                var Response = new RestaurantViewModel()
+                {
+                    Response = new Response(ex.GetType().ToString(), ex.Message)
+                };
+                return Partial("Restaurants/_partialError", Response);
+            }
+           
         }
     }
 }
