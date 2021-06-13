@@ -97,7 +97,8 @@ namespace Restaurant.UI.Razor_App.Pages.Restaurants
                 else
                 {
                     var error_result = CreateBooking.Content.ReadFromJsonAsync<BookingViewModel>().Result;
-                    return Partial("Restaurants/_partialError", error_result);
+                    
+                    return Partial("Restaurants/_bookingError", error_result);
                 }
             }
             catch (Exception ex)

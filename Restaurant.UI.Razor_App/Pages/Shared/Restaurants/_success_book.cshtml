@@ -21,9 +21,14 @@
 }
 else
 {
+    <p>
+        <a asp-page="/Reservation/Index">
+            Back
+        </a>
+    </p>
     <div class="alert alert-info" role="alert">
         <h4 class="alert-heading">
-           Successfull Booking Details
+            Successfull Booking Details
         </h4>
         <p>Below are the details of your booking.</p>
         <hr>
@@ -43,21 +48,21 @@ else
             </thead>
             <tbody>
                 <tr>
-                    <td class="col-2 text-right"> Booking Id</td>
-                    <td class="col-4 text-center">@Model.Booking.Id</td>
+                    <td text-right"> Booking Id</td>
+                    <td text-center">@Model.Booking.Id</td>
                 </tr>
                 <tr>
-                    <td class="col-2 text-right"> Restaurant's Name </td>
-                    <td class="col-4 text-center">@Model.Booking.RestaurantId</td>
+                    <td text-right"> Restaurant's Name </td>
+                    <td text-center">@Model.Booking.RestaurantId</td>
                 </tr>
                 <tr>
-                    <td class="col-2 text-right"> Reserved Date </td>
-                    <td class="col-4 text-center">@Model.Booking.ReservationDate</td>
+                    <td text-right"> Reserved Date </td>
+                    <td text-center">@Model.Booking.ReservationDate</td>
                 </tr>
 
                 <tr>
-                    <td class="col-2 text-right"> Reserved Time</td>
-                    <td class="col-4 text-center">@Model.Booking.ReservationTime</td>
+                    <td text-right"> Reserved Time</td>
+                    <td text-center">@Model.Booking.ReservationTime</td>
                 </tr>
             </tbody>
         </table>

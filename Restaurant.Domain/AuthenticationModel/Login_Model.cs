@@ -10,9 +10,12 @@ namespace Restaurant.Domain.AuthenticationModel
     public class Login_Model
     {
         [Required(ErrorMessage = "Username Required!")]
+        [Display(Name = "Username")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Password Required!")]
+        [Display(Name = "Password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

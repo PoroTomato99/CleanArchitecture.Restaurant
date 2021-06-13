@@ -28,6 +28,13 @@ namespace Restaurant.Infrastructure.IoC
             //Booking Application 
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IBookingRepo, BookingRepo>();
+
+            //UserProfile Application
+            services.AddScoped<IUserProfileService, UserProfileService>();
+            services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+
+
+            //Email Serivices
             
         }
     }

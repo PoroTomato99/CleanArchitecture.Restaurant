@@ -3,6 +3,7 @@ using Restaurant.Application.Interfaces;
 using Restaurant.Application.ViewModel;
 using Restaurant.Domain.AuthenticationModel;
 using Restaurant.Domain.Interfaces;
+using Restaurant.Domain.Models;
 using Restaurant.Domain.ResponsesModels;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace Restaurant.Application.Services
             };
         }
 
+
         public AuthenticationViewModel DeleteAdmin(string userId)
         {
             var DeleteAdmin = _authRepo.DeleteAdminAsync(userId);
@@ -47,5 +49,39 @@ namespace Restaurant.Application.Services
                 Token = _authRepo.LoginAdmin(credentials).Result.Token
             };
         }
+
+        public AuthenticationViewModel UpdateRole(UserProfile user)
+        {
+            var UpdateUserRole = _authRepo.UpdateRole(user).Result;
+            return new AuthenticationViewModel()
+            {
+                Profile = UpdateUserRole
+            };
+        }
+
+        public AuthenticationViewModel CreateCustomer(Register_Admin customer)
+        {
+            var CreateCustomer = _authRepo.RegisterUserAsync(customer);
+            return new AuthenticationViewModel()
+            {
+                User = CreateCustomer.Result,
+                Profile = _authRepo.GetUserProfile(customer.Username).Result
+            };
+        }
+
+        public AuthenticationViewModel GetApplicationUsers()
+        {
+            return new AuthenticationViewModel()
+            {
+                ApplicationUsers = _authRepo.GetApplicationUsers()
+            };
+        }
+        //public AuthenticationViewModel DeleteUserAsync(string userId)
+        //{
+        //    return new AuthenticationViewModel()
+        //    {
+        //        Response = _authRepo.DeleteUserAsync(userId).Result
+        //    };
+        //}
     }
 }

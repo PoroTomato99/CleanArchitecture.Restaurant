@@ -26,12 +26,33 @@ namespace Restaurant.WebApi.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
-        public AuthenticationController(IAuthenticationService authenticationService)
+        private readonly IUserProfileService _userProfileService;
+        public AuthenticationController(IAuthenticationService authenticationService, IUserProfileService userProfileService)
         {
             _authentication = authenticationService;
+            _userProfileService = userProfileService;
         }
 
-        //register admin
+        /*Login Controller*/
+        [HttpPost("login")]
+        public IActionResult LoginUser([FromBody] Login_Model credentials)
+        {
+            try
+            {
+                var LoginUser = _authentication.LoginUser(credentials);
+
+                return Ok(LoginUser);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new AuthenticationViewModel()
+                {
+                    Response = new(ex.GetType().ToString(), ex.Message)
+                });
+            }
+        }
+
+        /*register admin*/
         [HttpPost("admin-registration")]
         public IActionResult RegisterAdmin([FromBody] Register_Admin admin)
         {
@@ -50,6 +71,25 @@ namespace Restaurant.WebApi.Controllers
                 });
             }
         }
+
+        [HttpDelete("delete-user/{userId}")]
+        public IActionResult DeleteUser([FromRoute] string userId)
+        {
+            try
+            {
+                var DeleteUser = _authentication.DeleteAdmin(userId);
+                return Ok(DeleteUser);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return Conflict(new AuthenticationViewModel()
+                {
+                    Response = new($"{ex.GetType()}", $"{ex.Message}")
+                });
+            }
+        }
+
 
         [HttpDelete("delete-admin/{userId}")]
         public IActionResult DeleteAdmin([FromRoute]string userId)
@@ -74,23 +114,95 @@ namespace Restaurant.WebApi.Controllers
             return Ok("This is to Create Restaurant Owner");
         }
 
-        [HttpPost("login")]
-        public IActionResult LoginUser([FromBody] Login_Model credentials)
+
+        /*Create Customer*/
+        [HttpPost("customer")]
+        public IActionResult RegisterCustomer([FromBody] Register_Admin customer)
         {
             try
             {
-                var LoginUser = _authentication.LoginUser(credentials);
-
-                return Ok(LoginUser);
+                var CreateCustomer = _authentication.CreateCustomer(customer);
+                return Ok(CreateCustomer);
             }
             catch (Exception ex)
             {
                 return Conflict(new AuthenticationViewModel()
                 {
-                    Response = new(ex.GetType().ToString(), ex.Message)
+                    Response = new($"{ex.GetType()}", $"{ex.InnerException.Message}")
                 });
             }
         }
 
+        [HttpGet("users")]
+        public IActionResult GetApplicationUsers()
+        {
+            try
+            {
+                var users = _authentication.GetApplicationUsers();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                var AuthView = new AuthenticationViewModel()
+                {
+                    Response = new($"{ex.GetType()}", $"{ex.Message}")
+                };
+                return Conflict(AuthView);
+
+            }
+        }
+
+        [HttpPost("admin/approve-role")]
+        public IActionResult ApproveRole([FromBody] UserProfile profile)
+        {
+            try
+            {
+                var approveRole = _authentication.UpdateRole(profile);
+                return Ok(approveRole);
+            }
+            catch (Exception ex)
+            {
+                var x = new AuthenticationViewModel()
+                {
+                    Response = new()
+                    {
+                        Type = $"{ex.GetType()}",
+                        Message = $"{ex.Message}"
+                    }
+                };
+
+                return Conflict(x);
+            }
+        }
+
+
+        [HttpPost("customer/request-role")]
+        public IActionResult RequestRole([FromBody] UserProfile profile)
+        {
+            try
+            {
+                var CreateProfile = _userProfileService.CreateProfile(profile);
+                if(CreateProfile.Profile == null)
+                {
+                    return NotFound(CreateProfile);
+                }
+                else
+                {
+                    return Ok(CreateProfile);
+                }
+            }
+            catch (Exception ex)
+            {
+                var x = new AdminViewModel()
+                {
+                    ApiResponse = new()
+                    {
+                        Type = $"{ex.GetType()}",
+                        Message = $"{ex.Message}"
+                    }
+                };
+                return Conflict(x);
+            }
+        }
     }
 }

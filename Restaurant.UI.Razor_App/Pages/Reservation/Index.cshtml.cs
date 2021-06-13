@@ -23,8 +23,11 @@ namespace Restaurant.UI.Razor_App.Pages.Reservation
             _clientFactory = clientFactory;
             _configuration = configuration;
         }
+
+        public string Username { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
+            Username = HttpContext.Session.GetString("username");
             return Page();
         }
     }

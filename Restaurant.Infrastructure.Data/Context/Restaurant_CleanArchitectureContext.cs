@@ -15,9 +15,11 @@ namespace Restaurant.Infrastructure.Data.Context
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Announcement> Announcements { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<OwnerRegisterForm> OwnerRegisterForms { get; set; }
         public virtual DbSet<Domain.Models.Restaurant> Restaurants { get; set; }
+        public virtual DbSet<UserProfile> UserProfiles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

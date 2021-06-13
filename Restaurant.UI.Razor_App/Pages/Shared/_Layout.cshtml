@@ -22,14 +22,36 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Authentication/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Reservation/Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Reservation/Index">Reservations</a>
                         </li>
+
+
+                        @using Microsoft.AspNetCore.Http
+                        @if (Context.Session.GetString("token") != null) //if logged in
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Authentication/Logout">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Authentication/Owner/CreateRestaurant">Create Restaurnt</a>
+                            </li>
+
+                        }
+                        else //havent't log in
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Authentication/Index">Login</a>
+                            </li>
+
+                            //customer registration
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Authentication/Register">Register</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
@@ -40,7 +62,9 @@
             @RenderBody()
         </main>
     </div>
-
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Restaurant.UI.Razor_App - <a asp-area="" asp-page="/Privacy">Privacy</a>

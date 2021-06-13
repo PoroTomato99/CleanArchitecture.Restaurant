@@ -12,5 +12,16 @@ namespace Restaurant.Domain.AuthenticationModel
         public const string Employee = "Employee";
         public const string Customer = "Customer";
         public const string Admin = "Admin";
+
+        public static List<string> RoleItems()
+        {
+            return new List<string>()
+            {
+                Owner,
+                Employee,
+                Customer,
+                Admin,
+            };
+        }
     }
 }

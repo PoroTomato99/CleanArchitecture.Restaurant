@@ -27,7 +27,7 @@ namespace Restaurant.UI.Razor_App
             services.AddRazorPages();
             services.AddMvc().AddRazorPagesOptions(options =>
             {
-                options.Conventions.AddPageRoute("/Authentication/Index", "");
+                options.Conventions.AddPageRoute("/Reservation/Index", "");
             });
 
             /*add api url*/

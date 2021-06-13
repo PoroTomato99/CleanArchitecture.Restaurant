@@ -3,6 +3,34 @@
 @{
 }
 
-<h1>
-    This is Authentication Index
+@if (Model.Error != null)
+{
+    <partial name="Authentication/_loginError" model="@Model.Error" />
+}
+
+@if (Model.Success != null)
+{
+    <partial name="Authentication/_registerSuccess" model="@Model.Success" />
+}
+<h1 class="text-info text-lg-center">
+    Welcome to Login Page
 </h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="LoginModel.Username" class="form-label"></label>
+        <input type="text" asp-for="LoginModel.Username" class="form-control" id="username">
+        <span asp-validation-for="LoginModel.Username" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LoginModel.Password" class="form-label"></label>
+        <input type="password" asp-for="LoginModel.Password" class="form-control" id="Password">
+        <span asp-validation-for="LoginModel.Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <a asp-page="/Reservation/Index" class="btn btn-primary"> Back</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

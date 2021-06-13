@@ -14,5 +14,12 @@ namespace Restaurant.Domain.Interfaces
         Task<bool> DeleteAdminAsync(string userId);
         Task<JwtToken> LoginAdmin(Login_Model credentials);
         Task<UserProfile> GetUserProfile(string username);
+
+
+        Task<ApplicationUser> RegisterUserAsync(Register_Admin user);
+        //Task<bool> DeleteUserAsync(string userId);
+        public Task<UserProfile> UpdateRole(UserProfile user);
+
+        public List<ApplicationUser> GetApplicationUsers();
     }
 }

@@ -22,7 +22,7 @@ namespace Restaurant.Infrastructure.Data.Repositories
         public Booking CreateBooking(Booking x)
         {
             //if value null
-            if(x == null)
+            if (x == null)
             {
                 throw new Exception("No Value Found !");
             }
@@ -44,10 +44,8 @@ namespace Restaurant.Infrastructure.Data.Repositories
             /*reservation date time*/
             var reservedTime = TimeSpan.Parse(x.ReservationTime);
             var reservedDate = x.ReservationDate;
-            if (reservedDate < DateTime.Now)
-            {
-                throw new Exception("Invalid Reservation Date !");
-            }
+
+
             if (reservedTime < openHour && reservedTime > endHour)
             {
                 Console.WriteLine($"reserved time < open : {reservedTime < openHour}");
@@ -60,13 +58,13 @@ namespace Restaurant.Infrastructure.Data.Repositories
             var getReservations = _context.Bookings.Where(b => b.RestaurantId == getRestaurant.Id &&
                                                           b.ReservationDate == x.ReservationDate &&
                                                           b.ReservationTime == x.ReservationTime &&
-                                                          b.Status != BookingStatus.Completed && 
+                                                          b.Status != BookingStatus.Completed &&
                                                           b.Status != BookingStatus.Rejected &&
                                                           b.Status != BookingStatus.Cancelled).ToList();
 
             /*check if the exisitng reservation >= table quaitity*/
-            if(getReservations.Count >= getRestaurant.TableQty)
-            {   
+            if (getReservations.Count >= getRestaurant.TableQty)
+            {
                 if (getReservations.Any(b => b.ReservedBy == x.ReservedBy))
                 {
                     var i = getReservations.Where(b => b.ReservedBy == x.ReservedBy).First();

@@ -1,0 +1,48 @@
+﻿@page
+@model Restaurant.UI.Razor_App.Pages.Authentication.RegisterModel
+@{
+}
+
+@if (Model.SuccessResponse != null)
+{
+    <partial name="Authentication/_registerSuccess" model="@Model.SuccessResponse" />
+}
+@if (Model.ErrorResponse != null)
+{
+    <partial name="Authentication/_registerError" model="@Model.ErrorResponse"/>
+}
+
+<h1 class="text-info text-lg-center">
+    Welcome To Register Page
+</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="CustomerForm.Username" class="form-label"></label>
+        <input type="text" asp-for="CustomerForm.Username" class="form-control" id="username">
+        <span asp-validation-for="CustomerForm.Username" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CustomerForm.Password" class="form-label"></label>
+        <input type="password" asp-for="CustomerForm.Password" class="form-control" id="Password">
+        <span asp-validation-for="CustomerForm.Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CustomerForm.ConfirmPassword" class="form-label"></label>
+        <input type="password" asp-for="CustomerForm.ConfirmPassword" class="form-control" id="Password">
+        <span asp-validation-for="CustomerForm.ConfirmPassword" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CustomerForm.Email" class="form-label"></label>
+        <input type="email" asp-for="CustomerForm.Email" class="form-control" id="Password">
+        <span asp-validation-for="CustomerForm.Email" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+    <a class="btn btn-primary" asp-page="/Reservation/Index"> Back</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

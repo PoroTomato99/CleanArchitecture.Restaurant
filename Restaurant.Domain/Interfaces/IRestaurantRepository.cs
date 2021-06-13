@@ -24,9 +24,9 @@ namespace Restaurant.Domain.Interfaces
         IEnumerable<Models.Restaurant> GetRestaurants();
         Models.Restaurant GetRestaurant(int id);
         Models.Restaurant UpdateRestaurant(Models.Restaurant x);
-        Boolean DeleteRestaurant(Models.Restaurant x);
+        bool DeleteRestaurant(Models.Restaurant x);
 
         //Check if existed
-        Boolean IsRestaurantExist(Models.Restaurant x);
+        bool IsRestaurantExist(Models.Restaurant x);
     }
 }

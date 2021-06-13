@@ -1,0 +1,159 @@
+﻿@page
+@model Restaurant.UI.Razor_App.Pages.Authentication.Owner.CreateRestaurantModel
+@using Restaurant.Domain.AuthenticationModel;
+@{
+}
+
+<h3 class="text-lg-center text-primary">
+    Become a Restaurant Owner Now! Let Others Reserved Your Seats
+</h3>
+
+
+@if (Model.Role != UserRoles.Owner)
+{
+
+
+    <div class="container">
+        <div class="d-flex flex-row justify-content-center">
+            Request To Become Owner
+        </div>
+
+        <!--Request To Become Owner First-->
+        <form method="post" asp-page-handler="CreateOwner">
+            <div class="row justify-content-md-center">
+                <div class="col-5">
+                    <input type="text" asp-for="OwnerForm.FirstName" class="form-control" placeholder="First Name">
+                    <span asp-validation-for="OwnerForm.FirstName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row  justify-content-center">
+                <div class="col-5">
+                    <input type="text" asp-for="OwnerForm.LastName" class="form-control" placeholder="Last Name">
+                    <span asp-validation-for="OwnerForm.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row  justify-content-center">
+                <div class="col-5">
+                    @{
+
+                        List<string> RoleItems = UserRoles.RoleItems();
+
+
+                    }
+                    <select asp-for="OwnerForm.Role">
+                        <option value="" disabled selected> Please Choose A Role</option>
+                        @foreach (var x in RoleItems)
+                        {
+                            <option value="@x">@x</option>
+                        }
+                    </select>
+                    <span asp-validation-for="OwnerForm.Role" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <input type="hidden" asp-for="OwnerForm.UserId" value="@Model.UserId" />
+            <input type="hidden" asp-for="OwnerForm.Username" value="@Model.Username" />
+            <div class="row justify-content-md-center">
+                <div class="col-5"></div>
+                <button type="submit" class="btn btn-primary">
+                    Register
+                </button>
+
+                <div class="col-5">
+                    <a class="btn btn-primary" asp-page="/Reservation/Index">
+                        Back
+                    </a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <!--Created Restaurant then wait for approval-->
+    <div class="container">
+        <div class="d-flex flex-row justify-content-center">
+            Owner Registration
+        </div>
+
+        <!--Request To Become Owner First-->
+        <form method="post" asp-page-handler="CreateRestaurant">
+            <div class="d-flex flex-md-row justify-content-center">
+                <div class="row">
+                    <input type="text" asp-for="RestaurantForm.RestaurantName" class="form-control" placeholder="Restaurant's' Name">
+                    <span asp-validation-for="RestaurantForm.RestaurantName" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <input type="text" asp-for="RestaurantForm.Description" class="form-control" placeholder="Descriptions About Restaurant">
+                    <span asp-validation-for="RestaurantForm.Description" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <!--Get the List of Restaurant Types-->
+                    <select asp-for="RestaurantForm.Type" required>
+                        <option value="" disabled selected>Please Choose A Type</option>
+                        @{
+                            foreach (var x in Model.RestaurantType)
+                            {
+                                <option value="@x">@x</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="RestaurantForm.Type" class="text-danger"></span>
+                </div>
+                @{
+                    var timeList = new List<string>();
+
+                    var max = 22;
+                    var min = 8;
+
+                    var differ = max - min;
+                    for (var i = 0; i <= differ; i++)
+                    {
+                        if ((min + i) < 10)
+                        {
+                            var item = $"0{min + i}:00:00";
+                            timeList.Add(item);
+                        }
+                        else
+                        {
+                            var item = $"{min + i}:00:00";
+                            timeList.Add(item);
+                        }
+                    }
+                }
+                <div class="row">
+                    <select asp-for="RestaurantForm.OpenHour">
+                        @foreach (var x in timeList)
+                        {
+                            <option value="@x">@x</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RestaurantForm.OpenHour" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <select asp-for="RestaurantForm.EndHour">
+                        @foreach (var x in timeList)
+                        {
+                            <option value="@x">@x</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RestaurantForm.EndHour" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <input type="number" min="1" max="500" />
+                    <span asp-validation-for="RestaurantForm.TableQty" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Create Restaurant
+                </button>
+                <button class="btn btn-primary">
+                </button>
+            </div>
+        </form>
+    </div>
+}
+

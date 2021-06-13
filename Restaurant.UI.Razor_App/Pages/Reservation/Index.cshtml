@@ -38,9 +38,19 @@
     </script>
 }
 
-<h1 class="text-lg-center text-success">
-    Welcome to Restaurant Reservation System
-</h1>
+@if (Model.Username != null)
+{
+    <h1 class="text-lg-center text-success">
+        Welcome, <strong class="text-success">@Model.Username</strong> 
+    </h1>
+}
+else
+{
+    <h1 class="text-lg-center text-success">
+        Welcome to Restaurant Reservation System
+    </h1>
+}
+
 <div class="navbar navbar-expand navbar-light">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
