@@ -11,16 +11,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Restaurant.Application.ViewModel;
 using Restaurant.Domain.AuthenticationModel;
-using Restaurant.Domain.Models;
 
 namespace Restaurant.UI.Razor_App.Pages.Admin
 {
-    public class IndexModel : PageModel
+    public class ApproveRestaurantModel : PageModel
     {
-
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
-        public IndexModel(IConfiguration configuration, IHttpClientFactory clientFactory)
+        public ApproveRestaurantModel(IConfiguration configuration, IHttpClientFactory clientFactory)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;
@@ -35,7 +33,7 @@ namespace Restaurant.UI.Razor_App.Pages.Admin
         public string Success { get; set; }
         public string Error { get; set; }
 
-        public AdminViewModel AdminView { get; set; }
+        public RestaurantViewModel RestaurantRequest { get; set; }
         public async Task<IActionResult> OnGetAsync(string success, string error)
         {
             var client = _clientFactory.CreateClient("API_URL");
@@ -47,23 +45,30 @@ namespace Restaurant.UI.Razor_App.Pages.Admin
             Username = HttpContext.Session.GetString("username");
             UserId = HttpContext.Session.GetString("userid");
             Role = HttpContext.Session.GetString("role");
-            if(Token == null)
+            if (Token == null)
             {
                 return RedirectToPage("/Authentication/Index", new { error = $"Admin Login Required", success = "" });
             }
-            if(Role != UserRoles.Admin)
+            if (Role != UserRoles.Admin)
             {
                 return RedirectToPage("/Reservation/Index");
             }
-
-            AdminView = await client.GetFromJsonAsync<AdminViewModel>("Authentication/customer-role-request-list");
+            try
+            {
+                RestaurantRequest = await client.GetFromJsonAsync<RestaurantViewModel>("Restaurant");
+            }
+            catch (Exception ex)
+            {
+                return Partial("/CreateOwner/_RazorExceptionError");
+            }
+           
             Success = success;
             Error = error;
             return Page();
         }
 
         [BindProperty]
-        public UserProfile ApproveRole { get; set; }
+        public Domain.Models.Restaurant ApproveRestaurant { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             var client = _clientFactory.CreateClient("API_URL");
@@ -73,22 +78,21 @@ namespace Restaurant.UI.Razor_App.Pages.Admin
 
             try
             {
-                var updateRole = await client.PostAsJsonAsync("authentication/admin/approve-role", ApproveRole);
-                if (!updateRole.IsSuccessStatusCode)
+                var updateRestaurant = await client.PutAsJsonAsync("Restaurant/" + ApproveRestaurant.Id, ApproveRestaurant);
+                if (updateRestaurant.IsSuccessStatusCode)
                 {
-                    var error = updateRole.Content.ReadFromJsonAsync<AuthenticationViewModel>().Result;
-                    return RedirectToPage("./index", new { success = "", error = $"{error.Response.Message}" });
+                    var success = updateRestaurant.Content.ReadFromJsonAsync<RestaurantViewModel>().Result;
+                    return RedirectToPage("./ApproveRestaurant", new { success = $"{success.Response.Message}", error ="" });
                 }
                 else
                 {
-                    var success = updateRole.Content.ReadFromJsonAsync<AuthenticationViewModel>().Result;
-                    return RedirectToPage("./index", new { success = $"{success.Response.Message}", error = "" });
+                    var error = updateRestaurant.Content.ReadFromJsonAsync<RestaurantViewModel>().Result;
+                    return RedirectToPage("./ApproveRestaurant", new { success = "", error = $"{error.Response.Message}" });
                 }
             }
             catch (Exception ex)
             {
-                //log error ex
-                return RedirectToPage("./index", new { success = "", error = "Oops Somethings Wrong!" });
+                return Partial("/CreateOwner/_RazorExceptionError");
             }
         }
     }

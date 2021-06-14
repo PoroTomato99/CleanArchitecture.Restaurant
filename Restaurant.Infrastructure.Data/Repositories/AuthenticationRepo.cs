@@ -260,21 +260,45 @@ namespace Restaurant.Infrastructure.Data.Repositories
                 var UpdateRole = await userManager.AddToRoleAsync(exist_user, user.Role);
                 if (!UpdateRole.Succeeded)
                 {
-                    throw new Exception($"{UpdateRole.Errors.ToList()[1]}");
+                    throw new Exception($"Error Adding User to Role");
                 }
                 else
                 {
+                    var existProfile = _restContext.UserProfiles.Find(user.Id);
+                    if(existProfile == null)
+                    {
+                        throw new Exception("No Profile Existed!");
+                    }
+                    existProfile.Id = user.Id;
+                    existProfile.UserId = user.UserId;
+                    existProfile.Username = user.Username;
+                    existProfile.FirstName = user.FirstName;
+                    existProfile.LastName = user.LastName;
+                    existProfile.Role = user.Role;
+                    existProfile.DateRequested = user.DateRequested;
+                    existProfile.DateUpdated = user.DateUpdated;
+                    existProfile.UpdatedBy = user.UpdatedBy;
+                    existProfile.Status = user.Status;
+
+                    _restContext.UserProfiles.Update(existProfile);
+                    _restContext.SaveChanges();
                     var getUser = await userManager.FindByIdAsync(user.UserId);
                     var roles = await userManager.GetRolesAsync(getUser);
 
+                    var updatedProfile = _restContext.UserProfiles.Where(x => x.Username == user.Username).FirstOrDefault();
+
                     var Profile = new UserProfile()
                     {
-                        UserId = getUser.Id,
-                        Username = getUser.UserName,
+                        UserId = updatedProfile.UserId,
+                        Username = updatedProfile.Username,
+                        FirstName = updatedProfile.FirstName,
+                        LastName = updatedProfile.LastName,
+                        Status = updatedProfile.Status,
                         Roles = (List<string>)roles,
-                        UpdatedBy = user.UpdatedBy,
-                        DateRequested = user.DateRequested,
-                        DateUpdated = user.DateUpdated
+                        UpdatedBy = updatedProfile.UpdatedBy,
+                        DateRequested = updatedProfile.DateRequested,
+                        DateUpdated = updatedProfile.DateUpdated
+
                     };
                     return Profile;
                 }
@@ -285,6 +309,18 @@ namespace Restaurant.Infrastructure.Data.Repositories
         {
             var userList = userManager.Users.ToList();
             return userList;
+        }
+
+        public async Task<ApplicationUser> GetUserTable(string username)
+        {
+            //find user
+            var user = await userManager.FindByNameAsync(username);
+            if(user == null)
+            {
+                throw new Exception("No User Found !");
+            }
+           
+            return user;
         }
     }
 }

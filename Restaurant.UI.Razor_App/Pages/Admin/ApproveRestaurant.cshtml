@@ -1,0 +1,247 @@
+﻿@page
+@model Restaurant.UI.Razor_App.Pages.Admin.ApproveRestaurantModel
+@using Domain.Models.Status;
+@{
+}
+<partial name="./_AdminNav" />
+
+
+@if (Model.Success != null)
+{
+    <div class="alert alert-success" role="alert">
+        <p>
+            @Model.Success
+        </p>
+    </div>
+}
+@if (Model.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>
+            @Model.Error
+        </p>
+    </div>
+}
+
+<div class="alert alert-primary" role="alert">
+    <h3 class="text text-success text-lg-center">
+        Restaurant Approval Request List
+    </h3>
+</div>
+
+<div class="container">
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <td colspan="8" class="text text-md-center text-warning">
+                    Pending Restaurant Applications
+                </td>
+            </tr>
+            <tr>
+                <th>Restaurant Name</th>
+                <th>Type</th>
+                <th>Open Hour</th>
+                <th>End Hour</th>
+                <th>Table Quantity</th>
+                <th>Description</th>
+                <th>Owner Id</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var i in Model.RestaurantRequest.Restaurants.Where(x => x.Status == RestaurantStatus.Pending).ToList())
+            {
+                <tr>
+                    <td>@i.RestaurantName</td>
+                    <td>@i.Type</td>
+                    <td>@i.OpenHour</td>
+                    <td>@i.EndHour</td>
+                    <td>@i.TableQty</td>
+                    <td>@i.Description</td>
+                    <td>@i.UserId</td>
+                    <td>@i.Status</td>
+
+                    <td>
+                        <form method="post">
+                            @{
+                                var dateNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                            }
+                            <input type="hidden" asp-for="ApproveRestaurant.Id" value="@i.Id" />
+                            <input type="hidden" asp-for="ApproveRestaurant.RestaurantName" value="@i.RestaurantName" />
+                            <input type="hidden" asp-for="ApproveRestaurant.Type" value="@i.Type" />
+                            <input type="hidden" asp-for="ApproveRestaurant.OpenHour" value="@i.OpenHour" />
+                            <input type="hidden" asp-for="ApproveRestaurant.EndHour" value="@i.EndHour" />
+                            <input type="hidden" asp-for="ApproveRestaurant.TableQty" value="@i.TableQty" />
+                            <input type="hidden" asp-for="ApproveRestaurant.Description" value="@i.Description" />
+                            <input type="hidden" asp-for="ApproveRestaurant.UserId" value="@i.UserId" />
+                            <input type="hidden" asp-for="ApproveRestaurant.AppovalDate" value="@dateNow" />
+                            <input type="hidden" asp-for="ApproveRestaurant.ApprovedBy" value="@Model.UserId" />
+
+                            <select asp-for="ApproveRestaurant.Status" required>
+                                <option disabled selected>Selected Status</option>
+                                @foreach (var x in RestaurantStatus.RestaurantStatusItem())
+                                {
+                                    <option value="@x">@x</option>
+                                }
+                            </select>
+
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Update
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="container">
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <td colspan="8" class="text text-md-center text-success">
+                    Approved Restaurant Applications
+                </td>
+            </tr>
+            <tr>
+                <th>Restaurant Name</th>
+                <th>Type</th>
+                <th>Open Hour</th>
+                <th>End Hour</th>
+                <th>Table Quantity</th>
+                <th>Description</th>
+                <th>Owner Id</th>
+                <th>Status</th>
+                <th>Date Updated</th>
+                <th>Approved By</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var i in Model.RestaurantRequest.Restaurants.Where(x => x.Status == RestaurantStatus.Approve).ToList())
+            {
+                <tr>
+                    <td>@i.RestaurantName</td>
+                    <td>@i.Type</td>
+                    <td>@i.OpenHour</td>
+                    <td>@i.EndHour</td>
+                    <td>@i.TableQty</td>
+                    <td>@i.Description</td>
+                    <td>@i.UserId</td>
+                    <td>@i.Status</td>
+                    <td>@i.AppovalDate</td>
+                    <td>@i.ApprovedBy</td>
+
+                    <td>
+                        <form method="post">
+                            @{
+                                var dateNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                            }
+                            <input type="hidden" asp-for="ApproveRestaurant.Id" value="@i.Id" />
+                            <input type="hidden" asp-for="ApproveRestaurant.RestaurantName" value="@i.RestaurantName" />
+                            <input type="hidden" asp-for="ApproveRestaurant.Type" value="@i.Type" />
+                            <input type="hidden" asp-for="ApproveRestaurant.OpenHour" value="@i.OpenHour" />
+                            <input type="hidden" asp-for="ApproveRestaurant.EndHour" value="@i.EndHour" />
+                            <input type="hidden" asp-for="ApproveRestaurant.TableQty" value="@i.TableQty" />
+                            <input type="hidden" asp-for="ApproveRestaurant.Description" value="@i.Description" />
+                            <input type="hidden" asp-for="ApproveRestaurant.UserId" value="@i.UserId" />
+                            <input type="hidden" asp-for="ApproveRestaurant.AppovalDate" value="@dateNow" />
+                            <input type="hidden" asp-for="ApproveRestaurant.ApprovedBy" value="@Model.UserId" />
+
+                            <select asp-for="ApproveRestaurant.Status" required>
+                                <option disabled selected>Selected Status</option>
+                                @foreach (var x in RestaurantStatus.RestaurantStatusItem())
+                                {
+                                    <option value="@x">@x</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Update
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="container">
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <td colspan="8" class="text text-md-center text-danger">
+                    Approved Restaurant Applications
+                </td>
+            </tr>
+            <tr>
+                <th>Restaurant Name</th>
+                <th>Type</th>
+                <th>Open Hour</th>
+                <th>End Hour</th>
+                <th>Table Quantity</th>
+                <th>Description</th>
+                <th>Owner Id</th>
+                <th>Status</th>
+                <th>Date Updated</th>
+                <th>Approved By</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var i in Model.RestaurantRequest.Restaurants.Where(x => x.Status == RestaurantStatus.Rejected).ToList())
+            {
+                <tr>
+                    <td>@i.RestaurantName</td>
+                    <td>@i.Type</td>
+                    <td>@i.OpenHour</td>
+                    <td>@i.EndHour</td>
+                    <td>@i.TableQty</td>
+                    <td>@i.Description</td>
+                    <td>@i.UserId</td>
+                    <td>@i.Status</td>
+                    <td>@i.AppovalDate</td>
+                    <td>@i.ApprovedBy</td>
+
+                    <td>
+                        <form method="post">
+                            @{
+                                var dateNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                            }
+
+                            <input type="hidden" asp-for="ApproveRestaurant.Id" value="@i.Id" />
+                            <input type="hidden" asp-for="ApproveRestaurant.RestaurantName" value="@i.RestaurantName" />
+                            <input type="hidden" asp-for="ApproveRestaurant.Type" value="@i.Type" />
+                            <input type="hidden" asp-for="ApproveRestaurant.OpenHour" value="@i.OpenHour" />
+                            <input type="hidden" asp-for="ApproveRestaurant.EndHour" value="@i.EndHour" />
+                            <input type="hidden" asp-for="ApproveRestaurant.TableQty" value="@i.TableQty" />
+                            <input type="hidden" asp-for="ApproveRestaurant.Description" value="@i.Description" />
+                            <input type="hidden" asp-for="ApproveRestaurant.UserId" value="@i.UserId" />
+                            <input type="hidden" asp-for="ApproveRestaurant.AppovalDate" value="@dateNow" />
+                            <input type="hidden" asp-for="ApproveRestaurant.ApprovedBy" value="@Model.UserId" />
+
+                            <select asp-for="ApproveRestaurant.Status" required>
+                                <option disabled selected>Selected Status</option>
+                                @foreach (var x in RestaurantStatus.RestaurantStatusItem())
+                                {
+                                    <option value="@x">@x</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Update
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -95,7 +95,7 @@ namespace Restaurant.UI.Razor_App.Pages.Authentication
                     else
                     {
                         HttpContext.Session.SetString("role", UserRoles.Admin);
-                        return RedirectToPage("/Reservation/Index");
+                        return RedirectToPage("/Admin/Index");
                     }
                 }
                 else

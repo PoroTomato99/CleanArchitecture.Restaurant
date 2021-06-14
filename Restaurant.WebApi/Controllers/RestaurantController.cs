@@ -28,27 +28,39 @@ namespace Restaurant.WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            RestaurantViewModel r = _restaurant.GetRestaurants();
-            if (r.Restaurants == null)
+            try
             {
-                var response = new Domain.ResponsesModels.Response
-                (
-                    type: StatusCodes.Status404NotFound.ToString(),
-                    message: "Restaurants Not Found!"
-                );
-
-                //log error
-
-                //return view model
-                return NotFound
-                (
-                    new RestaurantViewModel
-                    {
-                        Response = response
-                    }
-                );
+                var GetRestaurants = _restaurant.GetRestaurants();
+                return Ok(GetRestaurants);
             }
-            return Ok(r);
+            catch (Exception ex)
+            {
+                return Conflict(new RestaurantViewModel()
+                {
+                    Response = new($"Error", $"{ex.Message}")
+                });
+            }
+            //RestaurantViewModel r = _restaurant.GetRestaurants();
+            //if (r.Restaurants == null)
+            //{
+            //    var response = new Domain.ResponsesModels.Response
+            //    (
+            //        type: StatusCodes.Status404NotFound.ToString(),
+            //        message: "Restaurants Not Found!"
+            //    );
+
+            //    //log error
+
+            //    //return view model
+            //    return NotFound
+            //    (
+            //        new RestaurantViewModel
+            //        {
+            //            Response = response
+            //        }
+            //    );
+            //}
+            //return Ok(r);
         }
 
         // GET api/<RestaurantController>/5

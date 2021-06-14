@@ -16,49 +16,28 @@ namespace Restaurant.Domain.Models
         [Required]
         [StringLength(450)]
         public string UserId { get; set; }
-
         [Required]
         [StringLength(256)]
         public string Username { get; set; }
-
         [StringLength(256)]
         [Required(ErrorMessage = "First Name Required!")]
         public string FirstName { get; set; }
-
         [StringLength(256)]
         [Required(ErrorMessage = "Last  Name Required!")]
         public string LastName { get; set; }
-
         [StringLength(100)]
         [Required(ErrorMessage = "Please Select a Role")]
         public string Role { get; set; }
-
         [Column(TypeName = "datetime")]
         public DateTime? DateRequested { get; set; }
-
         [Column(TypeName = "datetime")]
         public DateTime? DateUpdated { get; set; }
-
         [StringLength(450)]
         public string UpdatedBy { get; set; }
+        [StringLength(100)]
+        public string Status { get; set; }
 
         [NotMapped]
         public List<string> Roles { get; set; }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

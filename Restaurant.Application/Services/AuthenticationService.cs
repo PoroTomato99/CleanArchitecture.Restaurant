@@ -16,10 +16,12 @@ namespace Restaurant.Application.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IAuthenticationRepo _authRepo;
+        private readonly IUserProfileRepo _profileRepo;
 
-        public AuthenticationService(IAuthenticationRepo authentication)
+        public AuthenticationService(IAuthenticationRepo authentication, IUserProfileRepo profileRepo)
         {
             _authRepo = authentication;
+            _profileRepo = profileRepo;
         }
 
         public AuthenticationViewModel CreateAdmin(Register_Admin x)
@@ -55,7 +57,8 @@ namespace Restaurant.Application.Services
             var UpdateUserRole = _authRepo.UpdateRole(user).Result;
             return new AuthenticationViewModel()
             {
-                Profile = UpdateUserRole
+                Profile = UpdateUserRole,
+                Response = new("Success", "Successfully Approved User as Owner Role")
             };
         }
 
@@ -74,6 +77,15 @@ namespace Restaurant.Application.Services
             return new AuthenticationViewModel()
             {
                 ApplicationUsers = _authRepo.GetApplicationUsers()
+            };
+        }
+
+        public UserDetailsView GetUserDetail(string username)
+        {
+            return new UserDetailsView()
+            {
+                UserTable = _authRepo.GetUserTable(username),
+                Profile = _profileRepo.GetUserProfile(username)
             };
         }
         //public AuthenticationViewModel DeleteUserAsync(string userId)

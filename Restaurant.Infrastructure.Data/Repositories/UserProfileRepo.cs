@@ -1,5 +1,7 @@
-﻿using Restaurant.Domain.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Restaurant.Domain.Interfaces;
 using Restaurant.Domain.Models;
+using Restaurant.Domain.Models.Status;
 using Restaurant.Infrastructure.Data.Context;
 using System;
 using System.Collections.Generic;
@@ -13,9 +15,13 @@ namespace Restaurant.Infrastructure.Data.Repositories
     public class UserProfileRepo : IUserProfileRepo
     {
         private readonly Restaurant_CleanArchitectureContext _context;
-        public UserProfileRepo(Restaurant_CleanArchitectureContext context)
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+        public UserProfileRepo(Restaurant_CleanArchitectureContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public UserProfile CreateUserProfile(UserProfile profile)
@@ -23,11 +29,12 @@ namespace Restaurant.Infrastructure.Data.Repositories
             var transaction = _context.Database.BeginTransaction();
             //check if profile existed
             var exist = GetUserProfile(profile.Username);
+
+            var checkRequest = _context.UserProfiles.Where(x => x.Username == profile.Username && x.Role == profile.Role).FirstOrDefault();
             if(exist != null)
             {
-                throw new DuplicateNameException($"{profile.Username}'s Profile Already Existed");
+                throw new DuplicateNameException($"{profile.Username}'s Profile Already Requested for {profile.Role}");
             }
-
             
             _context.UserProfiles.Add(profile);
             _context.SaveChanges();
@@ -61,6 +68,9 @@ namespace Restaurant.Infrastructure.Data.Repositories
                 }
                 else
                 {
+                    var user = userManager.FindByNameAsync(username);
+                    var userRoles = userManager.GetRolesAsync(user.Result);
+                    profile.Roles = (List<string>) userRoles.Result;
                     return profile;
                 }
 

@@ -9,7 +9,7 @@ namespace Restaurant.Domain.Interfaces
 {
     public interface IBookingRepo
     {
-        IEnumerable<Booking> GetBookings();
+        List<Booking> GetBookings();
         Booking GetBooking(int id);
         Booking CreateBooking(Booking x);
         Booking UpdateBooing(Booking x);

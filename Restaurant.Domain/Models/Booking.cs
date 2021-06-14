@@ -49,8 +49,7 @@ namespace Restaurant.Domain.Models
                 $"Reservation Date : {ReservationDate.ToShortDateString()}\n" +
                 $"Reservation Time : {ReservationTime}\n" +
                 $"Reservation Status : {Status}\n" +
-                $"LastUpdated : {LastUpdate}\n" +
-                $"UpdatedBy : {UpdatedBy}";
+                $"LastUpdated : {LastUpdate}\n";
         }
     }
 }

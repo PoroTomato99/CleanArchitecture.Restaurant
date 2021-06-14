@@ -90,6 +90,11 @@ namespace Restaurant.Infrastructure.Data.Repositories
             x_restaurant.OpenHour = x.OpenHour;
             x_restaurant.EndHour = x.EndHour;
             x_restaurant.Description = x.Description;
+            x_restaurant.UserId = x.UserId;
+            x_restaurant.Status = x.Status;
+            x_restaurant.ApprovedBy = x.ApprovedBy;
+            x_restaurant.AppovalDate = x.AppovalDate;
+
             _context.Restaurants.Update(x_restaurant);
             try
             {

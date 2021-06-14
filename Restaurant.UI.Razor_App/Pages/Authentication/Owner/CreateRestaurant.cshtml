@@ -11,13 +11,27 @@
 
 @if (Model.Role != UserRoles.Owner)
 {
-
+    @if (Model.Success != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>
+                @Model.Success
+            </p>
+        </div>
+    }
+    @if (Model.Error != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>
+                @Model.Error
+            </p>
+        </div>
+    }
 
     <div class="container">
         <div class="d-flex flex-row justify-content-center">
             Request To Become Owner
         </div>
-
         <!--Request To Become Owner First-->
         <form method="post" asp-page-handler="CreateOwner">
             <div class="row justify-content-md-center">
@@ -35,10 +49,8 @@
             <div class="row  justify-content-center">
                 <div class="col-5">
                     @{
-
                         List<string> RoleItems = UserRoles.RoleItems();
-
-
+                        var dateTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
                     }
                     <select asp-for="OwnerForm.Role">
                         <option value="" disabled selected> Please Choose A Role</option>
@@ -54,6 +66,7 @@
 
             <input type="hidden" asp-for="OwnerForm.UserId" value="@Model.UserId" />
             <input type="hidden" asp-for="OwnerForm.Username" value="@Model.Username" />
+            <input type="hidden" asp-for="OwnerForm.DateRequested" value="@dateTime" />
             <div class="row justify-content-md-center">
                 <div class="col-5"></div>
                 <button type="submit" class="btn btn-primary">
@@ -72,7 +85,28 @@
 }
 else
 {
-    <!--Created Restaurant then wait for approval-->
+    @if (Model.Success != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <p>
+                @Model.Success
+            </p>
+        </div>
+    }
+    @if (Model.Error != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>
+                @Model.Error
+            </p>
+        </div>
+    }
+
+
+                            <partial name="Restaurants/Owner/_OwnerNav"/>
+
+
+    <!--Create Restaurant then wait for approval-->
     <div class="container">
         <div class="d-flex flex-row justify-content-center">
             Owner Registration
@@ -80,16 +114,20 @@ else
 
         <!--Request To Become Owner First-->
         <form method="post" asp-page-handler="CreateRestaurant">
-            <div class="d-flex flex-md-row justify-content-center">
-                <div class="row">
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
                     <input type="text" asp-for="RestaurantForm.RestaurantName" class="form-control" placeholder="Restaurant's' Name">
                     <span asp-validation-for="RestaurantForm.RestaurantName" class="text-danger"></span>
                 </div>
-                <div class="row">
+            </div>
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
                     <input type="text" asp-for="RestaurantForm.Description" class="form-control" placeholder="Descriptions About Restaurant">
                     <span asp-validation-for="RestaurantForm.Description" class="text-danger"></span>
                 </div>
-                <div class="row">
+            </div>
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
                     <!--Get the List of Restaurant Types-->
                     <select asp-for="RestaurantForm.Type" required>
                         <option value="" disabled selected>Please Choose A Type</option>
@@ -102,29 +140,34 @@ else
                     </select>
                     <span asp-validation-for="RestaurantForm.Type" class="text-danger"></span>
                 </div>
-                @{
-                    var timeList = new List<string>();
+            </div>
 
-                    var max = 22;
-                    var min = 8;
+            @{
+                var timeList = new List<string>();
 
-                    var differ = max - min;
-                    for (var i = 0; i <= differ; i++)
+                var max = 22;
+                var min = 8;
+
+                var differ = max - min;
+                for (var i = 0; i <= differ; i++)
+                {
+                    if ((min + i) < 10)
                     {
-                        if ((min + i) < 10)
-                        {
-                            var item = $"0{min + i}:00:00";
-                            timeList.Add(item);
-                        }
-                        else
-                        {
-                            var item = $"{min + i}:00:00";
-                            timeList.Add(item);
-                        }
+                        var item = $"0{min + i}:00:00";
+                        timeList.Add(item);
+                    }
+                    else
+                    {
+                        var item = $"{min + i}:00:00";
+                        timeList.Add(item);
                     }
                 }
-                <div class="row">
+            }
+
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
                     <select asp-for="RestaurantForm.OpenHour">
+                        <option disabled selected>Select Open Hour</option>
                         @foreach (var x in timeList)
                         {
                             <option value="@x">@x</option>
@@ -132,9 +175,12 @@ else
                     </select>
                     <span asp-validation-for="RestaurantForm.OpenHour" class="text-danger"></span>
                 </div>
+            </div>
 
-                <div class="row">
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
                     <select asp-for="RestaurantForm.EndHour">
+                        <option disabled selected>Select End Hour</option>
                         @foreach (var x in timeList)
                         {
                             <option value="@x">@x</option>
@@ -142,18 +188,31 @@ else
                     </select>
                     <span asp-validation-for="RestaurantForm.EndHour" class="text-danger"></span>
                 </div>
-                <div class="row">
-                    <input type="number" min="1" max="500" />
+            </div>
+
+
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
+                    <input asp-for="RestaurantForm.TableQty" type="number" min="1" max="500" placeholder="Table Quantity" />
                     <span asp-validation-for="RestaurantForm.TableQty" class="text-danger"></span>
                 </div>
-
-                <button type="submit" class="btn btn-primary">
-                    Create Restaurant
-                </button>
-                <button class="btn btn-primary">
-                </button>
             </div>
+
+            @using Domain.Models.Status
+            <input type="hidden" asp-for="RestaurantForm.Status" value="@RestaurantStatus.Pending" />
+            <input type="hidden" asp-for="RestaurantForm.UserId" value="@Model.UserId" />
+
+            <button type="submit" class="btn btn-primary">
+                Submit Restaurant Application
+            </button>
+
+            <a class="btn btn-primary" asp-page="/Reservation/Index">
+                Back
+            </a>
         </form>
     </div>
 }
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

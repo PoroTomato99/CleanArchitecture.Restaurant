@@ -1,0 +1,109 @@
+﻿@page "{username=JohnCena04}"
+@model Restaurant.UI.Razor_App.Pages.Admin.UserDetailModel
+
+@{
+}
+
+
+<div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">@Model.ProfileDetails.Profile.Username's Details</h4>
+    <hr>
+    <form method="post">
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6">
+                        Details
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ProfileDetails.Profile != null)
+                {
+                    <tr>
+                        <td colspan="2">
+                            First Name
+                        </td>
+                        <td>
+                            @if (Model.ProfileDetails.Profile.FirstName != null)
+                            {
+                                @Model.ProfileDetails.Profile.FirstName
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Last Name
+                        </td>
+                        <td>
+                            @if (Model.ProfileDetails.Profile.LastName != null)
+                            {
+                                @Model.ProfileDetails.Profile.LastName
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Role Requested :
+                        </td>
+                        <td colspan="2">
+                            @if (Model.ProfileDetails.Profile.Role != null)
+                            {
+                                @Model.Role
+                            }
+                        </td>
+
+                        <td colspan="2">
+                            Current Roles
+                        </td>
+                        <td colspan="2">
+                            @if (Model.ProfileDetails.Profile.Roles != null)
+                            {
+                                foreach (var i in Model.ProfileDetails.Profile.Roles)
+                                {
+                                    @i
+                                }
+                            }
+                        </td>
+
+                        <td colspan="2"> Date Requested</td>
+                        <td colspan="2">
+                            @if (Model.ProfileDetails.Profile.DateRequested != null)
+                            {
+                                @Model.ProfileDetails.Profile.DateRequested
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+
+                            @{
+                                var dateNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                            }
+                            <input type="hidden" asp-for="ApproveRole.Id" value="@Model.ProfileDetails.Profile.Id" />
+                            <input type="hidden" asp-for="ApproveRole.UserId" value="@Model.ProfileDetails.Profile.UserId" />
+                            <input type="hidden" asp-for="ApproveRole.Username" value="@Model.ProfileDetails.Profile.Username" />
+                            <input type="hidden" asp-for="ApproveRole.FirstName" value="@Model.ProfileDetails.Profile.FirstName" />
+                            <input type="hidden" asp-for="ApproveRole.LastName" value="@Model.ProfileDetails.Profile.LastName" />
+                            <input type="hidden" asp-for="ApproveRole.Role" value="@Model.ProfileDetails.Profile.Role" />
+                            <input type="hidden" asp-for="ApproveRole.DateRequested" value="@Model.ProfileDetails.Profile.DateRequested" />
+                            <input type="hidden" asp-for="ApproveRole.DateUpdated" value="@dateNow" />
+                            <input type="hidden" asp-for="ApproveRole.UpdatedBy" value="@Model.UserId" />
+
+                            @using Restaurant.Domain.Models.Status
+                            <input type="hidden" asp-for="ApproveRole.Status" value="@RoleStatus.Approve" />
+                            <button class="btn btn-primary" type="submit">
+                                Approve
+                            </button>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+
+                }
+
+            </tbody>
+        </table>
+    </form>
+</div>

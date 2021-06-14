@@ -50,7 +50,12 @@ namespace Restaurant.Application.Services
 
         public BookingViewModel UpdateBooking(Domain.Models.Booking r)
         {
-            throw new NotImplementedException();
+            var updateBooking = _bookingRepo.UpdateBooing(r);
+            return new BookingViewModel()
+            {
+                Booking = updateBooking,
+                Response = new("Update Booking", "Successfully Updated Booking")
+            };
         }
     }
 }

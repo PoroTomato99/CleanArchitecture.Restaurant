@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Restaurant.Application.ViewModel.BookingViewModel
+
+@if (Model == null)
+{
+<div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">Well done!</h4>
+    <p>Please Login To View Your Reservation History.</p>
+    <hr>
+    <p class="mb-0">
+        Please Click
+        <a asp-page="/Authentication/Index">
+            Here
+        </a>
+        to Login.
+    </p>
+    <p>
+        You can also go to your email to check for the Booking Number
+    </p>
+</div>
+}
+else
+{
+
+}

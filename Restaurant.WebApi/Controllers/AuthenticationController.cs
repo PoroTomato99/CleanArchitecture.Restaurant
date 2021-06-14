@@ -152,6 +152,48 @@ namespace Restaurant.WebApi.Controllers
             }
         }
 
+        [HttpGet("customer-role-request-list")]
+        public IActionResult RoleRequesList()
+        {
+            try
+            {
+                var getList = _userProfileService.GetProfiles();
+                return Ok(getList);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new AdminViewModel()
+                {
+                    ApiResponse = new($"{ex.GetType()}", $"{ex.Message}")
+                });
+            }
+        }
+
+        [HttpGet("user-detail/{username}")]
+        public IActionResult GetUserDetail([FromRoute] string username)
+        {
+            if(username == null)
+            {
+                return BadRequest(new UserDetailsView()
+                {
+                    Response = new("Bad Request", "No Username Provided!")
+                });
+            }
+            try
+            {
+                var getUser = _authentication.GetUserDetail(username);
+                return Ok(getUser);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new UserDetailsView()
+                {
+                    Response = new($"{ex.GetType()}", $"{ex.Message}")
+                });
+                throw;
+            }
+        }
+
         [HttpPost("admin/approve-role")]
         public IActionResult ApproveRole([FromBody] UserProfile profile)
         {

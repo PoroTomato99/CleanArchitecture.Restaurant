@@ -6,20 +6,10 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Domain.Models.Status
 {
-    public class RestaurantStatus
+    public class RoleStatus
     {
-        public const string Approve = "Approved";
+        public const string Approve = "Approve";
         public const string Pending = "Pending";
         public const string Rejected = "Rejected";
-
-        public static List<string> RestaurantStatusItem()
-        {
-            return new List<string>()
-            { 
-                Approve,Pending,Rejected
-            };
-        }
     }
-
-
 }

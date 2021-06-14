@@ -1,4 +1,53 @@
 ﻿@page
 @model Restaurant.UI.Razor_App.Pages.Restaurants.Owner.IndexModel
+@using Domain.Models.Status
 @{
 }
+
+<div class="alert alert-primary" role="alert">
+    <h3 class="text text-success text-lg-center">
+        Welcome to Restaurant Owner Panel, @Model.Username
+    </h3>
+</div>
+
+<table class="table table-sm table-bordered">
+    <thead>
+        <tr>
+            <th>Restaurant Name</th>
+            <th>Restaurant Type </th>
+            <th>Open Hour</th>
+            <th>End Hour</th>
+            <th>Restaurant Description </th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model.RestaurantView.Restaurants)
+        {
+            <tr>
+                <td>@x.RestaurantName</td>
+                <td>@x.Type</td>
+                <td>@x.OpenHour</td>
+                <td>@x.EndHour</td>
+                <td>@x.Description</td>
+
+                @if (x.Status == RestaurantStatus.Approve)
+                {
+                    <td>@x.AppovalDate</td>
+                    <td>
+                        <a asp-page="/Restaurants/Owner/Detail" asp-route-id="@x.Id">
+                            Go to Restaurant
+                        </a>
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                        @x.Status
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

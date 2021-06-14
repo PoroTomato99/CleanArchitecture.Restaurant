@@ -1,0 +1,115 @@
+﻿@page
+@model Restaurant.UI.Razor_App.Pages.Restaurants.Owner.DetailModel
+@{
+}
+@using Domain.Models.Status
+<div class="alert alert-primary" role="alert">
+    <h3 class="text text-success text-lg-center">
+        Welcome to Restaurant Owner Panel, @Model.Username
+    </h3>
+</div>
+
+<table class="table table-sm table-bordered">
+    <thead>
+        <tr>
+            <td colspan="4" class="text text-lg-center text-info">@Model.RestaurantDetails.Restaurant.RestaurantName </td>
+        </tr>
+        <tr>
+            <th>
+                Restaurant Type
+            </th>
+            <th>Open Hour</th>
+            <th>End Hour</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.RestaurantDetails.Restaurant.Type</td>
+            <td>@Model.RestaurantDetails.Restaurant.OpenHour</td>
+            <td>@Model.RestaurantDetails.Restaurant.EndHour</td>
+            <td>@Model.RestaurantDetails.Restaurant.Description</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table table-sm table-borderless">
+    <thead>
+        <tr>
+            <th colspan="8" class="text text-lg-center text-warning"> Reservation List </th>
+        </tr>
+        <tr>
+            <th>Booking No. </th>
+            <th>Booking Date </th>
+            <th>Reserved By </th>
+            <th>Reservation Date </th>
+            <th>Reservation Time</th>
+            <th>Status</th>
+            <th>Last Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.BookingList.Bookings == null)
+        {    
+           var newList = Model.BookingList.Bookings.Where(i => i.RestaurantId == Model.RestaurantDetails.Restaurant.Id).ToList();
+            
+            @if (newList == null)
+            {
+                <tr>
+                    <td class="text text-md-center text-info">
+                        Currently No Reservation Yet !
+                    </td>
+                </tr>
+            }
+
+            else
+            {
+                @foreach (var x in newList)
+                {
+                    <tr>
+                        <td>@x.Id</td>
+                        <td>@x.BookingDate</td>
+                        <td>@x.ReservedBy</td>
+                        <td>@x.ReservationDate</td>
+                        <td>@x.ReservationTime</td>
+                        <td>@x.Status</td>
+                        <td>@x.LastUpdate</td>
+
+                        <td>
+                            <form method="post">
+                                <input type="hidden" asp-for="UpdateBooking.Id" value="@x.Id" />
+                                <input type="hidden" asp-for="UpdateBooking.BookingDate" value="@x.BookingDate" />
+                                <input type="hidden" asp-for="UpdateBooking.ReservedBy" value="@x.ReservedBy" />
+                                <input type="hidden" asp-for="UpdateBooking.ReservationDate" value="@x.ReservationDate" />
+                                <input type="hidden" asp-for="UpdateBooking.ReservationTime" value="@x.ReservationTime" />
+
+                                <input type="hidden" asp-for="UpdateBooking.LastUpdate" value="@x.LastUpdate" />
+                                <input type="hidden" asp-for="UpdateBooking.UpdatedBy" value="@x.UpdatedBy" />
+
+                                <select asp-for="UpdateBooking.Status" required>
+                                    <option disabled selected> Select </option>
+                                    @foreach (var i in RestaurantStatus.RestaurantStatusItem())
+                                    {
+                                        <option value="@i"> @i</option>
+                                    }
+                                </select>
+                                <button class="btn btn-sm btn-primary">
+                                    Update
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="text text-md-center text-info">
+                    Currently No Reservation Yet !
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

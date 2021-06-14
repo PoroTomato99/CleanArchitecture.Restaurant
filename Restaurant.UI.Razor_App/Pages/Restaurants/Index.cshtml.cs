@@ -62,5 +62,27 @@ namespace Restaurant.UI.Razor_App.Pages.Restaurants
                 return Partial("Restaurant/_partialError", error);
             }
         }
+
+        public async Task<PartialViewResult> OnGetBookingHistory()
+        {
+            var client = _clientFactory.CreateClient("API_URL");
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            try
+            {
+                var BookingHistory = await client.GetFromJsonAsync<BookingViewModel>("Booking");
+                BookingHistory.Bookings = BookingHistory.Bookings.Where(x => x.ReservedBy == HttpContext.Session.GetString("userid")).ToList();
+                return Partial("/Reservation/_bookingHistory", BookingHistory);
+            }
+            catch (Exception ex)
+            {
+                var error = new RestaurantViewModel()
+                {
+                    Response = new Response(ex.GetType().ToString(), ex.Message)
+                };
+                return Partial("Restaurant/_partialError", error);
+            }
+        }
     }
 }

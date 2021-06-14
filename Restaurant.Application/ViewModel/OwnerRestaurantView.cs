@@ -1,4 +1,5 @@
 ﻿using Restaurant.Domain.Models;
+using Restaurant.Domain.ResponsesModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Application.ViewModel
 {
-    public class BookingViewModel
+    public class OwnerRestaurantView
     {
+        public Domain.Models.Restaurant Restaurant { get; set; }
         public List<Booking> Bookings { get; set; }
-        public Booking Booking { get; set; }
-        public Domain.ResponsesModels.Response Response {get;set;}
+        public Response Response { get; set; }
     }
 }

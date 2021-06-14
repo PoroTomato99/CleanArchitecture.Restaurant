@@ -1,6 +1,7 @@
 ﻿using Restaurant.Domain.Interfaces;
 using Restaurant.Domain.Models;
 using Restaurant.Domain.Models.Status;
+using Restaurant.Domain.ResponsesModels;
 using Restaurant.Infrastructure.Data.Context;
 using System;
 using System.Collections.Generic;
@@ -104,9 +105,17 @@ namespace Restaurant.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Booking> GetBookings()
+        public List<Booking> GetBookings()
         {
-            return _context.Bookings;
+            var x = _context.Bookings.ToList();
+            if(x == null)
+            {
+                return null;
+            }
+            else
+            {
+                return x;
+            }
         }
 
         public bool IsBookingExist(Booking x)
@@ -116,7 +125,32 @@ namespace Restaurant.Infrastructure.Data.Repositories
 
         public Booking UpdateBooing(Booking x)
         {
-            throw new NotImplementedException();
+            var x_booking = _context.Bookings.Find(x.Id);
+            if (x_booking == null)
+            {
+                throw new Exception($"Booking Not Found!");
+            }
+
+            x_booking.RestaurantId = x.RestaurantId;
+            x_booking.BookingDate = x.BookingDate;
+            x_booking.ReservedBy = x.ReservedBy;
+            x_booking.ReservationDate = x.ReservationDate;
+            x_booking.ReservationTime = x.ReservationTime;
+            x_booking.Status = x.Status;
+            x_booking.LastUpdate = x.LastUpdate;
+            x_booking.UpdatedBy = x.UpdatedBy;
+
+
+            _context.Bookings.Update(x_booking);
+            try
+            {
+                _context.SaveChanges();
+                return _context.Bookings.Find(x.Id);
+            }
+            catch (Exception e)
+            {
+                throw new SaveDbException(e.GetType().ToString(), e.Message);
+            }
         }
     }
 }

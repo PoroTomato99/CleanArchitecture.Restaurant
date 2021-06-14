@@ -15,52 +15,47 @@ using Restaurant.Domain.Models;
 
 namespace Restaurant.UI.Razor_App.Pages.Admin
 {
-    public class IndexModel : PageModel
+    public class UserDetailModel : PageModel
     {
-
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
-        public IndexModel(IConfiguration configuration, IHttpClientFactory clientFactory)
+        public UserDetailModel(IConfiguration configuration, IHttpClientFactory clientFactory)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;
         }
-
 
         public string Token { get; set; }
         public string Username { get; set; }
         public string UserId { get; set; }
         public string Role { get; set; }
 
-        public string Success { get; set; }
-        public string Error { get; set; }
-
-        public AdminViewModel AdminView { get; set; }
-        public async Task<IActionResult> OnGetAsync(string success, string error)
+        public UserDetailsView ProfileDetails { get; set; }
+        public async Task<IActionResult> OnGetAync(string username)
         {
             var client = _clientFactory.CreateClient("API_URL");
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
+
             Token = HttpContext.Session.GetString("token");
             Username = HttpContext.Session.GetString("username");
             UserId = HttpContext.Session.GetString("userid");
             Role = HttpContext.Session.GetString("role");
-            if(Token == null)
+            if (Token == null)
             {
                 return RedirectToPage("/Authentication/Index", new { error = $"Admin Login Required", success = "" });
             }
-            if(Role != UserRoles.Admin)
+            if (Role != UserRoles.Admin)
             {
                 return RedirectToPage("/Reservation/Index");
             }
 
-            AdminView = await client.GetFromJsonAsync<AdminViewModel>("Authentication/customer-role-request-list");
-            Success = success;
-            Error = error;
+            ProfileDetails = await client.GetFromJsonAsync<UserDetailsView>("authentication/user-detail/"+username);
             return Page();
         }
+
 
         [BindProperty]
         public UserProfile ApproveRole { get; set; }
@@ -91,5 +86,6 @@ namespace Restaurant.UI.Razor_App.Pages.Admin
                 return RedirectToPage("./index", new { success = "", error = "Oops Somethings Wrong!" });
             }
         }
+
     }
 }

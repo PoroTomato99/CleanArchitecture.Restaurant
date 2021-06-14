@@ -24,7 +24,8 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var x in Model.Restaurants)
+            @using Domain.Models.Status 
+            @foreach (var x in Model.Restaurants.Where(i => i.Status == RestaurantStatus.Approve).ToList())
             {
                 <tr>
                     <td> @x.RestaurantName </td>

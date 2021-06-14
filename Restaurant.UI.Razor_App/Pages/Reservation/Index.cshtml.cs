@@ -24,10 +24,37 @@ namespace Restaurant.UI.Razor_App.Pages.Reservation
             _configuration = configuration;
         }
 
+        public string UserId { get; set; }
         public string Username { get; set; }
+        public string Token { get; set; }
+        public string Role { get; set; }
+        public BookingViewModel BookingList { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string SearchBookingId { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
+            UserId = HttpContext.Session.GetString("userid");
             Username = HttpContext.Session.GetString("username");
+            Token = HttpContext.Session.GetString("token");
+            Role = HttpContext.Session.GetString("role");
+
+
+            var client = _clientFactory.CreateClient("API_URL");
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            BookingList = await client.GetFromJsonAsync<BookingViewModel>("Booking");
+
+
+            if (!String.IsNullOrEmpty(SearchBookingId))
+            {
+                var search = BookingList.Bookings.Where(x => x.Id == Convert.ToInt32(SearchBookingId)).FirstOrDefault();
+                if(search != null)
+                {
+                    BookingList.Bookings = BookingList.Bookings.Where(i => i.Id == search.Id).ToList();
+                }
+            }
             return Page();
         }
     }

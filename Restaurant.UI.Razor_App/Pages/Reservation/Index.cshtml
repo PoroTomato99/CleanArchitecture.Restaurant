@@ -12,12 +12,13 @@
             });
         });
 
-
+        $("#orderHistory").hide();
         $("button").on('click', function () {
             var btn_value = (this.id);
 
             switch (btn_value) {
                 case 'btn_1':
+                    $("#orderHistory").hide();
                     console.log("This is btn 1");
                     $(document).ready(function () {
                         $.ajax({
@@ -31,7 +32,7 @@
 
                 case 'btn_2':
                     console.log("This is btn 2");
-                    $("#load").html("This is button 2");
+                    $("#orderHistory").show();
                     break;
             }
         });
@@ -69,6 +70,91 @@ else
 </div>
 
 <div id="load">
+</div>
+
+
+
+<div id="orderHistory">
+    @if (Model.Token == null)
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Please Log In First!</h4>
+            <p>Log In To view Your Booking History</p>
+            <hr>
+            <p class="mb-0">Please Clikc <a asp-page="/Authentication/Index">Here Login</a></p>
+        </div>
+
+        <form>
+            <input placeholder="Enter Booking Id" type="text" asp-for="SearchBookingId" />
+            <input type="submit" value="Seach" />
+        </form>
+        <table class="table table-sm table-borderless">
+            <thead>
+                <tr>
+                    <th>Restaurant Id </th>
+                    <th>Booking Date </th>
+                    <th>Reservation  Date </th>
+                    <th>Reservation Time </th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @if (Model.SearchBookingId == null)
+                {
+                    <tr>
+                        <td colspan="5" class="text text-info text-md-center">Please Key In Your Booking ID</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var y in Model.BookingList.Bookings)
+                    {
+                        <tr>
+                            <td>@y.RestaurantId</td>
+                            <td>@y.BookingDate</td>
+                            <td>@y.ReservationDate</td>
+                            <td>@y.ReservationTime</td>
+                            <td>@y.Status</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    }
+   
+    @if(Model.Token != null)
+    {
+
+        <form>
+            <input placeholder="Enter Booking Id" type="text" asp-for="SearchBookingId" />
+            <input type="submit" value="Seach" />
+        </form>
+        <table class="table table-sm table-borderless">
+            <thead>
+                <tr>
+                    <th>Restaurant Id </th>
+                    <th>Booking Date </th>
+                    <th>Reservation  Date </th>
+                    <th>Reservation Time </th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var y in Model.BookingList.Bookings.Where(x => x.ReservedBy == Model.UserId).ToList())
+                {
+                    <tr>
+                        <td>@y.RestaurantId</td>
+                        <td>@y.BookingDate</td>
+                        <td>@y.ReservationDate</td>
+                        <td>@y.ReservationTime</td>
+                        <td>@y.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
 
 <div id="grid"></div>

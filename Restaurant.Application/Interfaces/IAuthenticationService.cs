@@ -20,5 +20,7 @@ namespace Restaurant.Application.Interfaces
         AuthenticationViewModel UpdateRole(UserProfile user);
         AuthenticationViewModel GetApplicationUsers();
 
+        UserDetailsView GetUserDetail(string username);
+
     }
 }

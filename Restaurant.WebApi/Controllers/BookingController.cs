@@ -73,8 +73,21 @@ namespace Restaurant.WebApi.Controllers
 
         // PUT api/<BookingController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Booking b)
         {
+            try
+            {
+                var updateBooking = _service.UpdateBooking(b);
+                return Ok(updateBooking);
+            }
+            catch (Exception ex)
+            {
+
+                return Conflict(new BookingViewModel()
+                {
+                    Response = new("Error", $"{ex.Message}")
+                }); ;
+            }
         }
 
         // DELETE api/<BookingController>/5

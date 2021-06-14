@@ -21,5 +21,7 @@ namespace Restaurant.Domain.Interfaces
         public Task<UserProfile> UpdateRole(UserProfile user);
 
         public List<ApplicationUser> GetApplicationUsers();
+
+        public Task<ApplicationUser> GetUserTable(string username);
     }
 }
