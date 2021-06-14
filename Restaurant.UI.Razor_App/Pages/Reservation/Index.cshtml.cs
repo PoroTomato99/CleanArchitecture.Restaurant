@@ -36,7 +36,7 @@ namespace Restaurant.UI.Razor_App.Pages.Reservation
             UserId = HttpContext.Session.GetString("userid");
             Username = HttpContext.Session.GetString("username");
             Token = HttpContext.Session.GetString("token");
-            Role = HttpContext.Session.GetString("role");
+            Role = HttpContext.Session.GetString("role");   
 
 
             var client = _clientFactory.CreateClient("API_URL");
