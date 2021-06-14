@@ -2,20 +2,23 @@
 @model DetailsModel
 @using Microsoft.AspNetCore.Http;
 
+
+
+
 @if (Model.Success != null)
 {
     <div class="alert alert-success" role="alert">
-        <p>
+        <h5>
             @Model.Success
-        </p>
+        </h5>
     </div>
 }
 @if (Model.Error != null)
 {
     <div class="alert alert-danger" role="alert">
-        <p>
+        <h5>
             @Model.Error
-        </p>
+        </h5>
     </div>
 }
 <h2 class="text-md-center">
