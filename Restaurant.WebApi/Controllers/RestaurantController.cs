@@ -40,27 +40,6 @@ namespace Restaurant.WebApi.Controllers
                     Response = new($"Error", $"{ex.Message}")
                 });
             }
-            //RestaurantViewModel r = _restaurant.GetRestaurants();
-            //if (r.Restaurants == null)
-            //{
-            //    var response = new Domain.ResponsesModels.Response
-            //    (
-            //        type: StatusCodes.Status404NotFound.ToString(),
-            //        message: "Restaurants Not Found!"
-            //    );
-
-            //    //log error
-
-            //    //return view model
-            //    return NotFound
-            //    (
-            //        new RestaurantViewModel
-            //        {
-            //            Response = response
-            //        }
-            //    );
-            //}
-            //return Ok(r);
         }
 
         // GET api/<RestaurantController>/5
@@ -225,5 +204,80 @@ namespace Restaurant.WebApi.Controllers
                 });
             }
         }
+
+
+
+        [HttpGet("restaurant-follower-details/{id}")]
+        public IActionResult GetRestaurantFollowers([FromRoute] int id)
+        {
+            try
+            {
+                var GetFollowers = _restaurant.GetFollowers(id);
+                return Ok(GetFollowers);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new RestaurantFollowerView()
+                {
+                    Response = new("Error", $"{ex.Message}")
+                });
+            }
+        }
+        [HttpDelete("unfollow/{id}")]
+        public IActionResult Unfollow([FromRoute] int id)
+        {
+            var following = _restaurant.GetSInglerFollower(id);
+            var x = following.FollowerDetail.Where(i => i.Id == id).FirstOrDefault();
+            if(x == null)
+            {
+                return BadRequest(new RestaurantFollowerView()
+                {
+                    Response = new("Error", "Bad Request Found!")
+                });
+            }
+            try
+            {
+                var remove = _restaurant.Unfollow(x);
+                if(remove == false)
+                {
+                    return Conflict(new RestaurantFollowerView()
+                    {
+                        Response = new("Unsucessful", "Failed to Unfollow Restaurant")
+                    });
+                }
+                else
+                {
+                    return Ok(new RestaurantFollowerView()
+                    {
+                        Response = new("Successful", "Unfollowed Retaurant")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new RestaurantFollowerView()
+                {
+                    Response = new("Internal Error", "Something Went Wrong!")
+                }); ;
+            }
+        }
+
+        [HttpPost("follow-restaurant")]
+        public IActionResult Follow([FromBody] RestaurantFollower follow)
+        {
+            try
+            {
+                var followRestaurant = _restaurant.FollowRestaurant(follow);
+                return Ok(followRestaurant);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new RestaurantFollowerView()
+                {
+                    Response = new("Error", $"{ex.Message}")
+                });
+            }
+        }
+
     }
 }

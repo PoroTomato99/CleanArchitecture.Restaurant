@@ -2,6 +2,7 @@
 using Restaurant.Application.Interfaces;
 using Restaurant.Application.ViewModel;
 using Restaurant.Domain.Interfaces;
+using Restaurant.Domain.Models;
 using Restaurant.Domain.ResponsesModels;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,52 @@ namespace Restaurant.Application.Services
             {
                 Restaurant = UpdateRestaurant
             };
+        }
+
+
+
+        public RestaurantFollowerView GetFollowers(int id)
+        {
+            var getFollower = _restaurant.GetRestaurantFollower(id);
+
+            return new()
+            {
+                FollowerDetail = getFollower,
+                TotalFollower = getFollower.Count()
+            };
+        }
+
+        public RestaurantFollowerView GetSInglerFollower(int id)
+        {
+            var SingleDetail = _restaurant.GetSInglerFollower(id);
+
+            var newItems = new List<RestaurantFollower>();
+            newItems.Add(SingleDetail);
+            return new()
+            {
+                FollowerDetail = newItems
+            };
+        }
+        public RestaurantFollowerView FollowRestaurant(RestaurantFollower follow)
+        {
+            var addFollower = _restaurant.FollowRestaurant(follow);
+
+            var restaurant = _restaurant.GetRestaurant(follow.RestaurantId);
+
+            List<RestaurantFollower> follower = new();
+            follower.Add(addFollower);
+            return new()
+            {
+                FollowerDetail = follower,
+                Response = new("Successful", $"Following {restaurant.RestaurantName}")
+            };
+        }
+
+
+        public bool Unfollow(RestaurantFollower unfollow)
+        {
+            var x = _restaurant.Unfollow(unfollow);
+            return x;
         }
     }
 }

@@ -1,11 +1,78 @@
 ﻿@page
 @model DetailsModel
+@using Microsoft.AspNetCore.Http;
 
+@if (Model.Success != null)
+{
+    <div class="alert alert-success" role="alert">
+        <p>
+            @Model.Success
+        </p>
+    </div>
+}
+@if (Model.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>
+            @Model.Error
+        </p>
+    </div>
+}
 <h2 class="text-md-center">
     Restaurant Details
 </h2>
 
 <partial name="Restaurants/_restaurantsDetails" model="@Model.RestaurantDetail">
+
+
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-2">
+                Totol Follower <span class="badge badge-light"> @Model.FollowerDetails.FollowerDetail.Count</span>
+            </div>
+            @if (HttpContext.Session.GetString("token") != null)
+            {
+                <div class="col col-lg-2">
+
+                    @if (Model.FollowerDetails.FollowerDetail.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.RestaurantId == Model.RestaurantDetail.Restaurant.Id).Count() > 0)
+                    {
+                        var value = @Model.FollowerDetails.FollowerDetail.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.RestaurantId == Model.RestaurantDetail.Restaurant.Id).FirstOrDefault();
+                        <form method="post" asp-page-handler="Unfollow">
+                            <input type="hidden" asp-for="Unfollow.Id" value="@value.Id" />
+                            <input type="hidden" asp-for="Unfollow.RestaurantId" value="@value.RestaurantId" />
+                            <input type="hidden" asp-for="Unfollow.RestaurantId" value="@value.UserId" />
+                            <input type="hidden" asp-for="Unfollow.RestaurantId" value="@value.DateFollowed" />
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Unfollow
+                            </button>
+                        </form>
+
+                    }
+                    else
+                    {
+                        //var value = @Model.FollowerDetails.FollowerDetail.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.RestaurantId == Model.RestaurantDetail.Restaurant.Id).FirstOrDefault();
+                        <form method="post" asp-page-handler="Follow">
+                            @{
+                                var dateNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+                            }
+                            <input type="hidden" asp-for="Follow.RestaurantId" value="@Model.RestaurantDetail.Restaurant.Id" />
+                            <input type="hidden" asp-for="Follow.UserId" value="@Model.UserId" />
+                            <input type="hidden" asp-for="Follow.DateFollowed" value="@dateNow" />
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Follow
+                            </button>
+                        </form>
+
+                    }
+
+                </div>
+            }
+        </div>
+    </div>
+
+
+
 
     @{
         var todate = DateTime.Now.ToString("yyyy-MM-dd");
@@ -19,10 +86,9 @@
 
         <select asp-for="Reservation.ReservationTime">
             <option selected value=""> --:-- </option>
-
         </select>
 
-        @using Microsoft.AspNetCore.Http;
+
         @if (HttpContext.Session.GetString("token") != null)
         {
             var userId = HttpContext.Session.GetString("userid");
@@ -33,10 +99,10 @@
             <div class="alert alert-info" role="alert">
                 Seems Like You Have Not Logged In
             </div>
-            <input type="email" asp-for="Reservation.ReservedBy" class="form-control" placeholder="Your Email Address" required/>
-                <p id="error" class="text-danger">
-                    This is Error
-                </p>
+            <input type="email" asp-for="Reservation.ReservedBy" class="form-control" placeholder="Your Email Address" required />
+            <p id="error" class="text-danger">
+                This is Error
+            </p>
         }
 
         <span asp-validation-for="Reservation.ReservationTime" class="text-danger"></span>
@@ -59,7 +125,7 @@
                     var regex = /^([a-zA-Z0-9_\.\-\+])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     if (!regex.test(text)) {
                         console.log("incorrect email");
-                        $("#error").html("<p class='text-danger'>"+"Invalid Email Address"+"</p>");
+                        $("#error").html("<p class='text-danger'>" + "Invalid Email Address" + "</p>");
                         $("p").show();
                     } else {
                         console.log("correct email")

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -104,6 +105,89 @@ namespace Restaurant.Infrastructure.Data.Repositories
             catch (Exception e)
             {
                 throw new SaveDbException(e.GetType().ToString(), e.Message);
+            }
+        }
+
+
+        /*Get Restaurant with follower*/
+        public List<RestaurantFollower> GetRestaurantFollower(int id)
+        {
+            //check if there is follower
+            var follower = _context.RestaurantFollowers.Where(x => x.RestaurantId == id).ToList();
+            return follower;
+        }
+
+        public RestaurantFollower GetSInglerFollower(int id)
+        {
+            var detail = _context.RestaurantFollowers.Find(id);
+            return detail;
+        }
+
+        public RestaurantFollower FollowRestaurant(RestaurantFollower follow)
+        {
+            if(follow == null)
+            {
+                throw new Exception("Bad Request");
+            }
+
+            var transaction = _context.Database.BeginTransaction();
+
+
+
+            _context.RestaurantFollowers.Add(follow);
+            try
+            {
+                _context.SaveChanges();
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+            }
+
+            var following = _context.RestaurantFollowers.Where(x => x.UserId == follow.UserId && x.RestaurantId == follow.RestaurantId).FirstOrDefault();
+            if(following != null)
+            {
+                return following;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        public bool Unfollow(RestaurantFollower follower)
+        {
+            var x = _context.RestaurantFollowers.Where(y => y.UserId == follower.UserId && y.RestaurantId == y.RestaurantId).FirstOrDefault();
+            if(x != null)
+            {
+                var transaction = _context.Database.BeginTransaction();
+                _context.RestaurantFollowers.Remove(x);
+                try
+                {
+                    _context.SaveChanges();
+                    var check = _context.RestaurantFollowers.Find(x.Id);
+                    if(check != null)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                    else
+                    {
+                        transaction.Commit();
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Log Error : {ex.Message}");
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
     }

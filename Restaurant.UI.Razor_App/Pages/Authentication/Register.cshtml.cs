@@ -54,7 +54,8 @@ namespace Restaurant.UI.Razor_App.Pages.Authentication
                 var CreateCustomer = await client.PostAsJsonAsync("Authentication/customer", CustomerForm);
                 if (!CreateCustomer.IsSuccessStatusCode)
                 {
-                    return RedirectToPage("./register", new { responseMessage = "Registration Unsuccessfull", successResponse = ""});
+                    var error = CreateCustomer.Content.ReadFromJsonAsync<AuthenticationViewModel>().Result;
+                    return RedirectToPage("./register", new { responseMessage = $"{error.Response.Message}", successResponse = ""});
                 }
                 var CustomerData = CreateCustomer.Content.ReadFromJsonAsync<AuthenticationViewModel>().Result;
                 return RedirectToPage("./Index", new { error ="", success = $"Successfully Created {CustomerData.Profile.Username}'s Account" });

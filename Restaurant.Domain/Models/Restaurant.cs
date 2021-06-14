@@ -14,6 +14,7 @@ namespace Restaurant.Domain.Models
         public Restaurant()
         {
             Bookings = new HashSet<Booking>();
+            RestaurantFollowers = new HashSet<RestaurantFollower>();
         }
 
         [Key]
@@ -53,5 +54,8 @@ namespace Restaurant.Domain.Models
         public virtual Address Address { get; set; }
         [InverseProperty(nameof(Booking.Restaurant))]
         public virtual ICollection<Booking> Bookings { get; set; }
+
+        [InverseProperty(nameof(RestaurantFollower.Restaurant))]
+        public virtual ICollection<RestaurantFollower> RestaurantFollowers { get; set; }
     }
 }

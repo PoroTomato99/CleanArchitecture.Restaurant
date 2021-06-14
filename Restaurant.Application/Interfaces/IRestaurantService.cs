@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.ViewModel;
+using Restaurant.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,12 @@ namespace Restaurant.Application.Interfaces
         RestaurantViewModel CreateRestaurant(Domain.Models.Restaurant r);
         RestaurantViewModel UpdateRestaurant(Domain.Models.Restaurant r);
         Boolean DeleteRestaurant(Domain.Models.Restaurant r);
+
+        RestaurantFollowerView GetSInglerFollower(int id);
+        RestaurantFollowerView GetFollowers(int id);
+
+        RestaurantFollowerView FollowRestaurant(RestaurantFollower follow);
+
+        bool Unfollow(RestaurantFollower unfollow);
     }
 }

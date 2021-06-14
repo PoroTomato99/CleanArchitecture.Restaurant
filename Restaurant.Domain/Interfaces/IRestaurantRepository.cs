@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,16 @@ namespace Restaurant.Domain.Interfaces
         //CRUD Function//
         Models.Restaurant AddRestaurant(Models.Restaurant x);
         IEnumerable<Models.Restaurant> GetRestaurants();
-        Models.Restaurant GetRestaurant(int id);
+        Models.Restaurant GetRestaurant(int id); 
         Models.Restaurant UpdateRestaurant(Models.Restaurant x);
         bool DeleteRestaurant(Models.Restaurant x);
+
+
+        //pass in restaurant id
+        List<RestaurantFollower> GetRestaurantFollower(int id);
+        RestaurantFollower GetSInglerFollower(int id);
+        RestaurantFollower FollowRestaurant(RestaurantFollower follow);
+        bool Unfollow(RestaurantFollower follower);
 
         //Check if existed
         bool IsRestaurantExist(Models.Restaurant x);

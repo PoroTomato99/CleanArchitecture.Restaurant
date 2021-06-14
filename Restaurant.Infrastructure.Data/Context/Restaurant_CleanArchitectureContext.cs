@@ -9,6 +9,10 @@ namespace Restaurant.Infrastructure.Data.Context
 {
     public partial class Restaurant_CleanArchitectureContext : DbContext
     {
+        public Restaurant_CleanArchitectureContext()
+        {
+        }
+
         public Restaurant_CleanArchitectureContext(DbContextOptions<Restaurant_CleanArchitectureContext> options)
             : base(options)
         {
@@ -19,6 +23,7 @@ namespace Restaurant.Infrastructure.Data.Context
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<OwnerRegisterForm> OwnerRegisterForms { get; set; }
         public virtual DbSet<Domain.Models.Restaurant> Restaurants { get; set; }
+        public virtual DbSet<RestaurantFollower> RestaurantFollowers { get; set; }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -49,6 +54,15 @@ namespace Restaurant.Infrastructure.Data.Context
                     .WithMany(p => p.Restaurants)
                     .HasForeignKey(d => d.AddressId)
                     .HasConstraintName("FK_Restaurant_Address");
+            });
+
+            modelBuilder.Entity<RestaurantFollower>(entity =>
+            {
+                entity.HasOne(d => d.Restaurant)
+                    .WithMany(p => p.RestaurantFollowers)
+                    .HasForeignKey(d => d.RestaurantId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Restaurant_Follower_Restaurant");
             });
 
             OnModelCreatingPartial(modelBuilder);
