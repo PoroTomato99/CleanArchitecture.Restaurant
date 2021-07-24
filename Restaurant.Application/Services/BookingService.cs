@@ -57,5 +57,16 @@ namespace Restaurant.Application.Services
                 Response = new("Update Booking", "Successfully Updated Booking")
             };
         }
+
+
+
+        public BookingViewModel TestingMethod()
+        {
+            var something = "Hello Testing Method";
+            return new()
+            {
+                Response = new Response("Testing", something);
+            };
+        }
     }
 }
