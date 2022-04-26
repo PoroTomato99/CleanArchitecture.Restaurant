@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moment.js" Version="2.29.1" />
+    <PackageReference Include="Moment.js" Version="2.29.2" />
   </ItemGroup>
 
   <ItemGroup>
